@@ -1,4 +1,7 @@
-import { Phone, Mail, Send } from "lucide-react";
+import { useState } from "react";
+import { Phone, Mail, Send, ChevronDown } from "lucide-react";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { cn } from "@/lib/utils";
 
 interface RadioStation {
   id: string;
@@ -6,7 +9,8 @@ interface RadioStation {
   frequency: string;
   audience: string;
   color: string;
-  icon?: React.ReactNode;
+  description: string;
+  format: string;
 }
 
 const radioStations: RadioStation[] = [
@@ -16,6 +20,8 @@ const radioStations: RadioStation[] = [
     frequency: "89.0 МГц",
     audience: "30–55 лет",
     color: "bg-retro-fm",
+    description: "Станция для ностальгических хитов, вызывающая сильный эмоциональный отклик у слушателей.",
+    format: "Ностальгические хиты 70-90х",
   },
   {
     id: "radio-dacha",
@@ -23,6 +29,8 @@ const radioStations: RadioStation[] = [
     frequency: "105.9 МГц",
     audience: "35–65 лет",
     color: "bg-radio-dacha",
+    description: "Семейный формат, ориентированный на уют и спокойствие для всей семьи.",
+    format: "Семейный формат",
   },
   {
     id: "humor-fm",
@@ -30,6 +38,8 @@ const radioStations: RadioStation[] = [
     frequency: "93.9 МГц",
     audience: "25–45 лет",
     color: "bg-humor-fm",
+    description: "Позитивный формат со смехом и легким настроением для активных слушателей.",
+    format: "Юмор и хиты",
   },
   {
     id: "love-radio",
@@ -37,6 +47,8 @@ const radioStations: RadioStation[] = [
     frequency: "88.1 / 92.2 МГц",
     audience: "18–35 лет",
     color: "bg-love-radio",
+    description: "Драйвовая и романтичная станция для молодежи с современными хитами.",
+    format: "Молодёжный формат",
   },
   {
     id: "shanson",
@@ -44,6 +56,8 @@ const radioStations: RadioStation[] = [
     frequency: "101.0 МГц",
     audience: "30–60 лет",
     color: "bg-shanson",
+    description: "Станция с «честными историями», которую предпочитают преимущественно мужчины.",
+    format: "Русский шансон",
   },
   {
     id: "avtoradio",
@@ -51,10 +65,14 @@ const radioStations: RadioStation[] = [
     frequency: "105.3 МГц",
     audience: "25–50 лет",
     color: "bg-avtoradio",
+    description: "Музыка и новости для автомобилистов — всегда в курсе событий за рулём.",
+    format: "Авто-формат",
   },
 ];
 
 const Sidebar = () => {
+  const [openStation, setOpenStation] = useState<string | null>(null);
+
   return (
     <aside className="w-72 min-h-screen bg-card border-r border-border flex flex-col">
       {/* Logo */}
@@ -77,24 +95,61 @@ const Sidebar = () => {
       {/* Radio Stations */}
       <div className="flex-1 p-4 space-y-1 overflow-y-auto">
         {radioStations.map((station, index) => (
-          <div
+          <Collapsible
             key={station.id}
-            className="group p-3 rounded-xl hover:bg-secondary/80 transition-all duration-200 cursor-pointer animate-fade-in"
-            style={{ animationDelay: `${index * 50}ms` }}
+            open={openStation === station.id}
+            onOpenChange={(isOpen) => setOpenStation(isOpen ? station.id : null)}
           >
-            <div className="flex items-start gap-3">
-              <div
-                className={`w-3 h-3 rounded-full ${station.color} mt-1.5 ring-2 ring-offset-2 ring-offset-card ring-transparent group-hover:ring-current transition-all`}
-              />
-              <div className="flex-1 min-w-0">
-                <h3 className="font-medium text-sm text-foreground group-hover:text-primary transition-colors">
-                  {station.name}
-                </h3>
-                <p className="text-xs text-muted-foreground">{station.frequency}</p>
-                <p className="text-xs text-muted-foreground/70">{station.audience}</p>
+            <CollapsibleTrigger asChild>
+              <button
+                className={cn(
+                  "w-full group p-3 rounded-xl hover:bg-secondary/80 transition-all duration-200 cursor-pointer animate-fade-in text-left",
+                  openStation === station.id && "bg-secondary/80"
+                )}
+                style={{ animationDelay: `${index * 50}ms` }}
+              >
+                <div className="flex items-start gap-3">
+                  <div
+                    className={cn(
+                      "w-3 h-3 rounded-full mt-1.5 ring-2 ring-offset-2 ring-offset-card transition-all",
+                      station.color,
+                      openStation === station.id ? "ring-primary" : "ring-transparent group-hover:ring-current"
+                    )}
+                  />
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-medium text-sm text-foreground group-hover:text-primary transition-colors">
+                      {station.name}
+                    </h3>
+                    <p className="text-xs text-muted-foreground">{station.frequency}</p>
+                    <p className="text-xs text-muted-foreground/70">{station.audience}</p>
+                  </div>
+                  <ChevronDown 
+                    className={cn(
+                      "w-4 h-4 text-muted-foreground transition-transform duration-200",
+                      openStation === station.id && "rotate-180"
+                    )} 
+                  />
+                </div>
+              </button>
+            </CollapsibleTrigger>
+            <CollapsibleContent className="overflow-hidden data-[state=open]:animate-accordion-down data-[state=closed]:animate-accordion-up">
+              <div className="ml-6 mr-2 mb-2 p-3 rounded-lg bg-secondary/50 border border-border/50 space-y-2">
+                <div>
+                  <p className="text-[10px] uppercase tracking-wide text-muted-foreground mb-0.5">Формат</p>
+                  <p className="text-xs text-foreground font-medium">{station.format}</p>
+                </div>
+                <div>
+                  <p className="text-[10px] uppercase tracking-wide text-muted-foreground mb-0.5">Описание</p>
+                  <p className="text-xs text-muted-foreground leading-relaxed">{station.description}</p>
+                </div>
+                <div className="pt-1">
+                  <span className={cn("inline-block px-2 py-0.5 rounded-full text-[10px] font-medium text-white", station.color)}>
+                    {station.audience}
+                  </span>
+                </div>
               </div>
-            </div>
-          </div>
+            </CollapsibleContent>
+          </Collapsible>
         ))}
       </div>
 
