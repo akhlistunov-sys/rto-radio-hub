@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { Settings2, Download, Check } from "lucide-react";
+import { Radio, Calendar, Clock, Users, TrendingUp, Send, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Slider } from "@/components/ui/slider";
 import { cn } from "@/lib/utils";
 
 interface Station {
@@ -25,16 +25,17 @@ const initialStations: Station[] = [
 ];
 
 const timeSlots = [
-  "07:00-08:00", "08:00-09:00", "09:00-10:00", "10:00-11:00", "11:00-12:00",
-  "12:00-13:00", "13:00-14:00", "14:00-15:00", "15:00-16:00", "16:00-17:00",
-  "17:00-18:00", "18:00-19:00", "19:00-20:00", "20:00-21:00", "21:00-22:00",
+  { label: "Утро", time: "07:00-10:00", multiplier: 1.2, icon: "🌅" },
+  { label: "День", time: "10:00-16:00", multiplier: 1.0, icon: "☀️" },
+  { label: "Вечер", time: "16:00-20:00", multiplier: 1.3, icon: "🌆" },
+  { label: "Ночь", time: "20:00-23:00", multiplier: 0.8, icon: "🌙" },
 ];
 
 const Calculator = () => {
   const [days, setDays] = useState(30);
   const [duration, setDuration] = useState(20);
   const [stations, setStations] = useState(initialStations);
-  const [selectedSlots, setSelectedSlots] = useState<string[]>(timeSlots);
+  const [selectedSlots, setSelectedSlots] = useState<string[]>(["Утро", "День", "Вечер"]);
 
   const selectedStations = stations.filter(s => s.selected);
   const totalReach = selectedStations.reduce((sum, s) => sum + s.dailyReach * days, 0);
@@ -48,186 +49,212 @@ const Calculator = () => {
     ));
   };
 
-  const toggleSlot = (slot: string) => {
+  const toggleSlot = (label: string) => {
     setSelectedSlots(prev => 
-      prev.includes(slot) 
-        ? prev.filter(s => s !== slot)
-        : [...prev, slot]
+      prev.includes(label) 
+        ? prev.filter(s => s !== label)
+        : [...prev, label]
     );
   };
 
   return (
     <section className="flex-1 p-6 overflow-y-auto animate-fade-in">
-      <div className="max-w-6xl mx-auto grid lg:grid-cols-3 gap-6">
-        {/* Left Column - Parameters */}
-        <div className="lg:col-span-2 space-y-6">
-          {/* Parameters Card */}
-          <div className="glass-card p-6">
-            <div className="flex items-center gap-2 mb-6">
-              <Settings2 className="w-5 h-5 text-primary" />
-              <h2 className="font-semibold text-foreground">ПАРАМЕТРЫ РАЗМЕЩЕНИЯ</h2>
-            </div>
-            
-            <div className="grid sm:grid-cols-2 gap-6">
-              <div className="space-y-2">
-                <Label className="text-muted-foreground text-xs uppercase tracking-wide">Дней проката</Label>
-                <Input
-                  type="number"
-                  value={days}
-                  onChange={(e) => setDays(Number(e.target.value))}
-                  className="bg-secondary/50 border-0 text-lg font-medium"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label className="text-muted-foreground text-xs uppercase tracking-wide">Хронометраж (сек)</Label>
-                <Input
-                  type="number"
-                  value={duration}
-                  onChange={(e) => setDuration(Number(e.target.value))}
-                  className="bg-secondary/50 border-0 text-lg font-medium"
-                />
-              </div>
-            </div>
+      <div className="max-w-5xl mx-auto space-y-8">
+        {/* Header */}
+        <div className="text-center space-y-2">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium">
+            <Sparkles className="w-4 h-4" />
+            Калькулятор рекламы
           </div>
-
-          {/* Stations Selection */}
-          <div className="glass-card p-6">
-            <h3 className="text-xs uppercase tracking-wide text-muted-foreground mb-4">Выбор станций (РТО)</h3>
-            <div className="space-y-2">
-              {stations.map((station) => (
-                <button
-                  key={station.id}
-                  onClick={() => toggleStation(station.id)}
-                  className={cn(
-                    "w-full flex items-center gap-3 p-4 rounded-xl border-2 transition-all duration-200 text-left",
-                    station.selected
-                      ? "border-primary bg-primary/5"
-                      : "border-border hover:border-primary/30"
-                  )}
-                >
-                  <div className={cn(
-                    "w-6 h-6 rounded-full flex items-center justify-center transition-colors",
-                    station.selected ? "bg-primary" : "bg-secondary"
-                  )}>
-                    {station.selected && <Check className="w-4 h-4 text-primary-foreground" />}
-                  </div>
-                  <div className={`w-3 h-3 rounded-full ${station.color}`} />
-                  <div className="flex-1">
-                    <span className="font-medium text-foreground">{station.name}</span>
-                    <span className="text-sm text-muted-foreground ml-2">{station.frequency}</span>
-                    <span className="text-sm text-muted-foreground"> • {station.city}</span>
-                  </div>
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Time Slots */}
-          <div className="glass-card p-6">
-            <h3 className="text-xs uppercase tracking-wide text-muted-foreground mb-4">Индивидуальные слоты</h3>
-            <div className="flex flex-wrap gap-2">
-              {timeSlots.map((slot) => (
-                <button
-                  key={slot}
-                  onClick={() => toggleSlot(slot)}
-                  className={cn(
-                    "px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200",
-                    selectedSlots.includes(slot)
-                      ? "bg-primary text-primary-foreground"
-                      : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
-                  )}
-                >
-                  {slot}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Media Grid */}
-          <div className="glass-card p-6">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-xs uppercase tracking-wide text-muted-foreground flex items-center gap-2">
-                <span className="w-4 h-4 grid grid-cols-2 gap-0.5">
-                  {[...Array(4)].map((_, i) => (
-                    <span key={i} className="bg-muted-foreground/50 rounded-sm" />
-                  ))}
-                </span>
-                МЕДИА-СЕТКА
-              </h3>
-              <Button variant="ghost" size="sm" className="text-primary gap-1">
-                <Download className="w-4 h-4" />
-                EXCEL
-              </Button>
-            </div>
-
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b border-border">
-                    <th className="text-left py-3 px-2 text-muted-foreground font-medium">СТАНЦИЯ</th>
-                    <th className="text-center py-3 px-2 text-muted-foreground font-medium">ДНЕЙ</th>
-                    <th className="text-center py-3 px-2 text-muted-foreground font-medium">ВЫХОДОВ</th>
-                    <th className="text-right py-3 px-2 text-muted-foreground font-medium">ОХВАТ В СУТКИ</th>
-                    <th className="text-right py-3 px-2 text-muted-foreground font-medium">ИТОГО ОХВАТ</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {selectedStations.map((station) => (
-                    <tr key={station.id} className="border-b border-border/50">
-                      <td className="py-4 px-2">
-                        <div className="flex items-center gap-2">
-                          <span className={`w-2 h-2 rounded-full ${station.color}`} />
-                          <div>
-                            <div className="font-medium text-foreground">{station.name}</div>
-                            <div className="text-xs text-muted-foreground">{station.frequency}</div>
-                          </div>
-                        </div>
-                      </td>
-                      <td className="text-center py-4 px-2 text-foreground">{days}</td>
-                      <td className="text-center py-4 px-2 text-foreground">{exitsPerDay}</td>
-                      <td className="text-right py-4 px-2 text-primary font-medium">~{station.dailyReach.toLocaleString()}</td>
-                      <td className="text-right py-4 px-2 text-foreground font-medium">~{(station.dailyReach * days).toLocaleString()}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
+          <h1 className="text-2xl font-bold text-foreground">Рассчитайте стоимость кампании</h1>
+          <p className="text-muted-foreground">Настройте параметры и получите мгновенный расчёт</p>
         </div>
 
-        {/* Right Column - Summary */}
-        <div className="lg:col-span-1">
-          <div className="glass-card p-6 sticky top-6 border-2 border-primary/20">
-            <div className="inline-block px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium mb-4">
-              ИТОГ РАСЧЁТА
+        <div className="grid lg:grid-cols-5 gap-6">
+          {/* Left Side - Configuration */}
+          <div className="lg:col-span-3 space-y-6">
+            {/* Sliders Card */}
+            <div className="glass-card p-6 space-y-8">
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Calendar className="w-5 h-5 text-primary" />
+                    <span className="font-medium text-foreground">Срок размещения</span>
+                  </div>
+                  <span className="text-2xl font-bold text-primary">{days} дней</span>
+                </div>
+                <Slider
+                  value={[days]}
+                  onValueChange={(value) => setDays(value[0])}
+                  min={7}
+                  max={90}
+                  step={1}
+                  className="py-2"
+                />
+                <div className="flex justify-between text-xs text-muted-foreground">
+                  <span>7 дней</span>
+                  <span>90 дней</span>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Clock className="w-5 h-5 text-primary" />
+                    <span className="font-medium text-foreground">Хронометраж ролика</span>
+                  </div>
+                  <span className="text-2xl font-bold text-primary">{duration} сек</span>
+                </div>
+                <Slider
+                  value={[duration]}
+                  onValueChange={(value) => setDuration(value[0])}
+                  min={10}
+                  max={60}
+                  step={5}
+                  className="py-2"
+                />
+                <div className="flex justify-between text-xs text-muted-foreground">
+                  <span>10 сек</span>
+                  <span>60 сек</span>
+                </div>
+              </div>
             </div>
-            
-            <div className="space-y-6">
-              <div>
-                <p className="text-sm text-muted-foreground mb-1">К ОПЛАТЕ</p>
-                <p className="text-4xl font-bold text-primary">
-                  {totalPrice.toLocaleString()} ₽
-                </p>
+
+            {/* Time Slots */}
+            <div className="glass-card p-6">
+              <h3 className="font-medium text-foreground mb-4 flex items-center gap-2">
+                <Clock className="w-5 h-5 text-primary" />
+                Время эфира
+              </h3>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                {timeSlots.map((slot) => (
+                  <button
+                    key={slot.label}
+                    onClick={() => toggleSlot(slot.label)}
+                    className={cn(
+                      "relative p-4 rounded-2xl border-2 transition-all duration-300 text-center group",
+                      selectedSlots.includes(slot.label)
+                        ? "border-primary bg-primary/5 shadow-lg shadow-primary/10"
+                        : "border-border hover:border-primary/40 bg-card"
+                    )}
+                  >
+                    <div className="text-2xl mb-2">{slot.icon}</div>
+                    <div className="font-medium text-foreground">{slot.label}</div>
+                    <div className="text-xs text-muted-foreground">{slot.time}</div>
+                    {selectedSlots.includes(slot.label) && (
+                      <div className="absolute top-2 right-2 w-2 h-2 rounded-full bg-primary animate-pulse" />
+                    )}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Stations Grid */}
+            <div className="glass-card p-6">
+              <h3 className="font-medium text-foreground mb-4 flex items-center gap-2">
+                <Radio className="w-5 h-5 text-primary" />
+                Радиостанции
+              </h3>
+              <div className="grid sm:grid-cols-2 gap-3">
+                {stations.map((station) => (
+                  <button
+                    key={station.id}
+                    onClick={() => toggleStation(station.id)}
+                    className={cn(
+                      "relative p-4 rounded-2xl border-2 transition-all duration-300 text-left group overflow-hidden",
+                      station.selected
+                        ? "border-primary bg-gradient-to-br from-primary/10 to-primary/5"
+                        : "border-border hover:border-primary/40 bg-card"
+                    )}
+                  >
+                    {/* Color accent bar */}
+                    <div className={cn("absolute left-0 top-0 bottom-0 w-1 transition-all", station.color, station.selected ? "opacity-100" : "opacity-40")} />
+                    
+                    <div className="pl-3">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className={cn("w-3 h-3 rounded-full", station.color)} />
+                        <span className="font-semibold text-foreground">{station.name}</span>
+                      </div>
+                      <div className="text-sm text-muted-foreground">{station.frequency}</div>
+                      <div className="flex items-center justify-between mt-2">
+                        <span className="text-xs text-muted-foreground">{station.city}</span>
+                        <div className="flex items-center gap-1 text-xs">
+                          <Users className="w-3 h-3 text-primary" />
+                          <span className="text-primary font-medium">{station.dailyReach.toLocaleString()}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Selection indicator */}
+                    {station.selected && (
+                      <div className="absolute top-2 right-2 w-5 h-5 rounded-full bg-primary flex items-center justify-center">
+                        <svg className="w-3 h-3 text-primary-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                        </svg>
+                      </div>
+                    )}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Right Side - Summary */}
+          <div className="lg:col-span-2">
+            <div className="glass-card p-6 sticky top-6 space-y-6 border-2 border-primary/20 bg-gradient-to-br from-card to-primary/5">
+              {/* Price Badge */}
+              <div className="text-center pb-6 border-b border-border">
+                <p className="text-sm text-muted-foreground mb-2">Стоимость кампании</p>
+                <div className="relative inline-block">
+                  <span className="text-5xl font-bold text-primary">
+                    {totalPrice.toLocaleString()}
+                  </span>
+                  <span className="text-2xl font-bold text-primary ml-1">₽</span>
+                </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4 py-4 border-y border-border">
-                <div>
-                  <p className="text-xs text-muted-foreground uppercase">Суммарный охват</p>
-                  <p className="text-xl font-bold text-foreground">{totalReach.toLocaleString()}</p>
+              {/* Stats Grid */}
+              <div className="grid grid-cols-2 gap-4">
+                <div className="p-4 rounded-xl bg-secondary/50 text-center">
+                  <TrendingUp className="w-5 h-5 text-primary mx-auto mb-2" />
+                  <p className="text-2xl font-bold text-foreground">{totalReach.toLocaleString()}</p>
+                  <p className="text-xs text-muted-foreground">охват</p>
                 </div>
-                <div>
-                  <p className="text-xs text-muted-foreground uppercase">Цена контакта</p>
-                  <p className="text-xl font-bold text-foreground">{pricePerContact} ₽</p>
+                <div className="p-4 rounded-xl bg-secondary/50 text-center">
+                  <Users className="w-5 h-5 text-primary mx-auto mb-2" />
+                  <p className="text-2xl font-bold text-foreground">{pricePerContact}</p>
+                  <p className="text-xs text-muted-foreground">₽ / контакт</p>
+                </div>
+                <div className="p-4 rounded-xl bg-secondary/50 text-center">
+                  <Radio className="w-5 h-5 text-primary mx-auto mb-2" />
+                  <p className="text-2xl font-bold text-foreground">{selectedStations.length}</p>
+                  <p className="text-xs text-muted-foreground">станций</p>
+                </div>
+                <div className="p-4 rounded-xl bg-secondary/50 text-center">
+                  <Calendar className="w-5 h-5 text-primary mx-auto mb-2" />
+                  <p className="text-2xl font-bold text-foreground">{exitsPerDay * days}</p>
+                  <p className="text-xs text-muted-foreground">выходов</p>
                 </div>
               </div>
 
-              <div className="space-y-3">
-                <h4 className="text-xs uppercase tracking-wide text-muted-foreground">Заказать кампанию</h4>
-                <Input placeholder="Ваше имя" className="bg-secondary/50 border-0" />
-                <Input placeholder="Телефон" className="bg-secondary/50 border-0" />
-                <Button className="w-full" variant="outline">
-                  ОТПРАВИТЬ ЗАЯВКУ И ПОЛУЧИТЬ РАДИО В ПОДАРОК
+              {/* Contact Form */}
+              <div className="space-y-3 pt-4 border-t border-border">
+                <h4 className="font-medium text-foreground text-center">Оставить заявку</h4>
+                <Input 
+                  placeholder="Ваше имя" 
+                  className="bg-background/80 border-border"
+                />
+                <Input 
+                  placeholder="Телефон" 
+                  className="bg-background/80 border-border"
+                />
+                <Button className="w-full gap-2 h-12 text-base">
+                  <Send className="w-4 h-4" />
+                  Получить предложение
                 </Button>
+                <p className="text-xs text-center text-muted-foreground">
+                  🎁 +1 день размещения в подарок
+                </p>
               </div>
             </div>
           </div>
