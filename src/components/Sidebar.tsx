@@ -3,6 +3,15 @@ import { Phone, Mail, Send, ChevronDown } from "lucide-react";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { cn } from "@/lib/utils";
 
+// Import logos
+import retroFmLogo from "@/assets/logos/retro-fm.png";
+import radioDachaLogo from "@/assets/logos/radio-dacha.jpg";
+import humorFmLogo from "@/assets/logos/humor-fm.png";
+import loveRadioLogo from "@/assets/logos/love-radio.png";
+import shansonLogo from "@/assets/logos/shanson.jpg";
+import avtoradioLogo from "@/assets/logos/avtoradio.jpg";
+import rtoLogo from "@/assets/logos/rto.png";
+
 interface RadioStation {
   id: string;
   name: string;
@@ -11,6 +20,7 @@ interface RadioStation {
   color: string;
   description: string;
   format: string;
+  logo: string;
 }
 
 const radioStations: RadioStation[] = [
@@ -22,6 +32,7 @@ const radioStations: RadioStation[] = [
     color: "bg-retro-fm",
     description: "Станция для ностальгических хитов, вызывающая сильный эмоциональный отклик у слушателей.",
     format: "Ностальгические хиты 70-90х",
+    logo: retroFmLogo,
   },
   {
     id: "radio-dacha",
@@ -31,6 +42,7 @@ const radioStations: RadioStation[] = [
     color: "bg-radio-dacha",
     description: "Семейный формат, ориентированный на уют и спокойствие для всей семьи.",
     format: "Семейный формат",
+    logo: radioDachaLogo,
   },
   {
     id: "humor-fm",
@@ -40,6 +52,7 @@ const radioStations: RadioStation[] = [
     color: "bg-humor-fm",
     description: "Позитивный формат со смехом и легким настроением для активных слушателей.",
     format: "Юмор и хиты",
+    logo: humorFmLogo,
   },
   {
     id: "love-radio",
@@ -49,6 +62,7 @@ const radioStations: RadioStation[] = [
     color: "bg-love-radio",
     description: "Драйвовая и романтичная станция для молодежи с современными хитами.",
     format: "Молодёжный формат",
+    logo: loveRadioLogo,
   },
   {
     id: "shanson",
@@ -58,6 +72,7 @@ const radioStations: RadioStation[] = [
     color: "bg-shanson",
     description: "Станция с «честными историями», которую предпочитают преимущественно мужчины.",
     format: "Русский шансон",
+    logo: shansonLogo,
   },
   {
     id: "avtoradio",
@@ -67,6 +82,7 @@ const radioStations: RadioStation[] = [
     color: "bg-avtoradio",
     description: "Музыка и новости для автомобилистов — всегда в курсе событий за рулём.",
     format: "Авто-формат",
+    logo: avtoradioLogo,
   },
 ];
 
@@ -77,23 +93,12 @@ const Sidebar = () => {
     <aside className="w-72 min-h-screen bg-card border-r border-border flex flex-col">
       {/* Logo */}
       <div className="p-6 border-b border-border">
-        <div className="flex items-center gap-1 mb-2">
-          <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center text-primary-foreground font-bold text-lg">
-            Р
-          </div>
-          <div className="w-10 h-10 rounded-lg bg-radio-dacha flex items-center justify-center text-primary-foreground font-bold text-lg">
-            Т
-          </div>
-          <div className="w-10 h-10 rounded-lg bg-retro-fm flex items-center justify-center text-primary-foreground font-bold text-lg">
-            О
-          </div>
-        </div>
-        <p className="text-sm font-semibold text-foreground">РАДИО ТЮМЕНСКОЙ ОБЛАСТИ</p>
+        <img src={rtoLogo} alt="РТО" className="h-12 object-contain mb-2" />
         <p className="text-xs text-muted-foreground">Ялуторовск / Заводоуковск</p>
       </div>
 
       {/* Radio Stations */}
-      <div className="flex-1 p-4 space-y-1 overflow-y-auto">
+      <div className="flex-1 p-3 space-y-1 overflow-y-auto">
         {radioStations.map((station, index) => (
           <Collapsible
             key={station.id}
@@ -103,29 +108,26 @@ const Sidebar = () => {
             <CollapsibleTrigger asChild>
               <button
                 className={cn(
-                  "w-full group p-3 rounded-xl hover:bg-secondary/80 transition-all duration-200 cursor-pointer animate-fade-in text-left",
+                  "w-full group p-2 rounded-xl hover:bg-secondary/80 transition-all duration-200 cursor-pointer animate-fade-in text-left",
                   openStation === station.id && "bg-secondary/80"
                 )}
                 style={{ animationDelay: `${index * 50}ms` }}
               >
-                <div className="flex items-start gap-3">
-                  <div
-                    className={cn(
-                      "w-3 h-3 rounded-full mt-1.5 ring-2 ring-offset-2 ring-offset-card transition-all",
-                      station.color,
-                      openStation === station.id ? "ring-primary" : "ring-transparent group-hover:ring-current"
-                    )}
+                <div className="flex items-center gap-3">
+                  <img 
+                    src={station.logo} 
+                    alt={station.name} 
+                    className="w-10 h-10 object-contain rounded-lg"
                   />
                   <div className="flex-1 min-w-0">
-                    <h3 className="font-medium text-sm text-foreground group-hover:text-primary transition-colors">
+                    <h3 className="font-medium text-sm text-foreground group-hover:text-primary transition-colors truncate">
                       {station.name}
                     </h3>
                     <p className="text-xs text-muted-foreground">{station.frequency}</p>
-                    <p className="text-xs text-muted-foreground/70">{station.audience}</p>
                   </div>
                   <ChevronDown 
                     className={cn(
-                      "w-4 h-4 text-muted-foreground transition-transform duration-200",
+                      "w-4 h-4 text-muted-foreground transition-transform duration-200 shrink-0",
                       openStation === station.id && "rotate-180"
                     )} 
                   />
@@ -133,19 +135,18 @@ const Sidebar = () => {
               </button>
             </CollapsibleTrigger>
             <CollapsibleContent className="overflow-hidden data-[state=open]:animate-accordion-down data-[state=closed]:animate-accordion-up">
-              <div className="ml-6 mr-2 mb-2 p-3 rounded-lg bg-secondary/50 border border-border/50 space-y-2">
+              <div className="ml-4 mr-2 mb-2 p-3 rounded-lg bg-secondary/50 border border-border/50 space-y-2">
                 <div>
                   <p className="text-[10px] uppercase tracking-wide text-muted-foreground mb-0.5">Формат</p>
                   <p className="text-xs text-foreground font-medium">{station.format}</p>
                 </div>
                 <div>
+                  <p className="text-[10px] uppercase tracking-wide text-muted-foreground mb-0.5">Аудитория</p>
+                  <p className="text-xs text-foreground font-medium">{station.audience}</p>
+                </div>
+                <div>
                   <p className="text-[10px] uppercase tracking-wide text-muted-foreground mb-0.5">Описание</p>
                   <p className="text-xs text-muted-foreground leading-relaxed">{station.description}</p>
-                </div>
-                <div className="pt-1">
-                  <span className={cn("inline-block px-2 py-0.5 rounded-full text-[10px] font-medium text-white", station.color)}>
-                    {station.audience}
-                  </span>
                 </div>
               </div>
             </CollapsibleContent>
