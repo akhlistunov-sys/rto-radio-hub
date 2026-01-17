@@ -1,5 +1,13 @@
 import { Award, Users, Headphones, Target, Phone, Mail, Send, MapPin } from "lucide-react";
-import { Button } from "@/components/ui/button";
+
+// Import logos
+import logoRTO from "@/assets/logo-rto.png";
+import logoRetro from "@/assets/radio-retro.png";
+import logoDacha from "@/assets/radio-dacha.jpg";
+import logoHumor from "@/assets/radio-humor.png";
+import logoLove from "@/assets/radio-love.png";
+import logoShanson from "@/assets/radio-shanson.jpg";
+import logoAutoradio from "@/assets/radio-autoradio.jpg";
 
 const features = [
   {
@@ -25,12 +33,12 @@ const features = [
 ];
 
 const stations = [
-  { name: "Ретро FM", freq: "89.0 МГц", audience: "30–55 лет", desc: "Ностальгические хиты", color: "bg-retro-fm" },
-  { name: "Радио Дача", freq: "105.9 МГц", audience: "35–65 лет", desc: "Семейный формат", color: "bg-radio-dacha" },
-  { name: "Юмор FM", freq: "93.9 МГц", audience: "25–45 лет", desc: "Позитив и смех", color: "bg-humor-fm" },
-  { name: "Love Radio", freq: "88.1 / 92.2 МГц", audience: "18–35 лет", desc: "Романтика и драйв", color: "bg-love-radio" },
-  { name: "Радио Шансон", freq: "101.0 МГц", audience: "30–60 лет", desc: "Честные истории", color: "bg-shanson" },
-  { name: "Авторадио", freq: "105.3 МГц", audience: "25–50 лет", desc: "Для автомобилистов", color: "bg-avtoradio" },
+  { name: "Ретро FM", freq: "89.0 МГц", audience: "30–55 лет", desc: "Ностальгические хиты", logo: logoRetro },
+  { name: "Радио Дача", freq: "105.9 МГц", audience: "35–65 лет", desc: "Семейный формат", logo: logoDacha },
+  { name: "Юмор FM", freq: "93.9 МГц", audience: "25–45 лет", desc: "Позитив и смех", logo: logoHumor },
+  { name: "Love Radio", freq: "88.1 / 92.2 МГц", audience: "18–35 лет", desc: "Романтика и драйв", logo: logoLove },
+  { name: "Радио Шансон", freq: "101.0 МГц", audience: "30–60 лет", desc: "Честные истории", logo: logoShanson },
+  { name: "Авторадио", freq: "105.3 МГц", audience: "25–50 лет", desc: "Для автомобилистов", logo: logoAutoradio },
 ];
 
 const About = () => {
@@ -75,7 +83,11 @@ const About = () => {
                 style={{ animationDelay: `${index * 50}ms` }}
               >
                 <div className="flex items-start gap-3">
-                  <span className={`w-4 h-4 rounded-full ${station.color} mt-1`} />
+                  <img 
+                    src={station.logo} 
+                    alt={station.name}
+                    className="w-14 h-14 object-contain rounded-lg bg-white"
+                  />
                   <div>
                     <h4 className="font-semibold text-foreground">{station.name}</h4>
                     <p className="text-sm text-primary">{station.freq}</p>
@@ -134,17 +146,7 @@ const About = () => {
             
             <div className="flex items-center justify-center">
               <div className="text-center">
-                <div className="flex items-center justify-center gap-1 mb-4">
-                  <div className="w-14 h-14 rounded-xl bg-primary flex items-center justify-center text-primary-foreground font-bold text-2xl">
-                    Р
-                  </div>
-                  <div className="w-14 h-14 rounded-xl bg-radio-dacha flex items-center justify-center text-primary-foreground font-bold text-2xl">
-                    Т
-                  </div>
-                  <div className="w-14 h-14 rounded-xl bg-retro-fm flex items-center justify-center text-primary-foreground font-bold text-2xl">
-                    О
-                  </div>
-                </div>
+                <img src={logoRTO} alt="РТО" className="h-20 object-contain mx-auto mb-4" />
                 <div className="flex items-center gap-1 text-muted-foreground text-sm justify-center">
                   <MapPin className="w-4 h-4" />
                   <span>Ялуторовск • Заводоуковск</span>
