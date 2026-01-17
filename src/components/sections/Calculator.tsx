@@ -5,6 +5,14 @@ import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
 import { cn } from "@/lib/utils";
 
+// Import logos
+import logoRetro from "@/assets/radio-retro.png";
+import logoDacha from "@/assets/radio-dacha.jpg";
+import logoHumor from "@/assets/radio-humor.png";
+import logoLove from "@/assets/radio-love.png";
+import logoShanson from "@/assets/radio-shanson.jpg";
+import logoAutoradio from "@/assets/radio-autoradio.jpg";
+
 interface Station {
   id: string;
   name: string;
@@ -13,15 +21,16 @@ interface Station {
   color: string;
   dailyReach: number;
   selected: boolean;
+  logo: string;
 }
 
 const initialStations: Station[] = [
-  { id: "retro-fm", name: "Ретро FM", frequency: "89.0 МГц", city: "Ялуторовск", color: "bg-retro-fm", dailyReach: 2596, selected: true },
-  { id: "radio-dacha", name: "Радио Дача", frequency: "105.9 МГц", city: "Ялуторовск", color: "bg-radio-dacha", dailyReach: 2343, selected: true },
-  { id: "humor-fm", name: "Юмор FM", frequency: "93.9 МГц", city: "Ялуторовск", color: "bg-humor-fm", dailyReach: 1514, selected: false },
-  { id: "love-radio", name: "Love Radio", frequency: "88.1 / 92.2 МГц", city: "Ялуторовск, Заводоуковск", color: "bg-love-radio", dailyReach: 1009, selected: false },
-  { id: "shanson", name: "Радио Шансон", frequency: "101.0 МГц", city: "Заводоуковск", color: "bg-shanson", dailyReach: 2081, selected: false },
-  { id: "avtoradio", name: "Авторадио", frequency: "105.3 МГц", city: "Заводоуковск", color: "bg-avtoradio", dailyReach: 2343, selected: true },
+  { id: "retro-fm", name: "Ретро FM", frequency: "89.0 МГц", city: "Ялуторовск", color: "bg-retro-fm", dailyReach: 2596, selected: true, logo: logoRetro },
+  { id: "radio-dacha", name: "Радио Дача", frequency: "105.9 МГц", city: "Ялуторовск", color: "bg-radio-dacha", dailyReach: 2343, selected: true, logo: logoDacha },
+  { id: "humor-fm", name: "Юмор FM", frequency: "93.9 МГц", city: "Ялуторовск", color: "bg-humor-fm", dailyReach: 1514, selected: false, logo: logoHumor },
+  { id: "love-radio", name: "Love Radio", frequency: "88.1 / 92.2 МГц", city: "Ялуторовск, Заводоуковск", color: "bg-love-radio", dailyReach: 1009, selected: false, logo: logoLove },
+  { id: "shanson", name: "Радио Шансон", frequency: "101.0 МГц", city: "Заводоуковск", color: "bg-shanson", dailyReach: 2081, selected: false, logo: logoShanson },
+  { id: "avtoradio", name: "Авторадио", frequency: "105.3 МГц", city: "Заводоуковск", color: "bg-avtoradio", dailyReach: 2343, selected: true, logo: logoAutoradio },
 ];
 
 const timeSlots = [
@@ -167,20 +176,21 @@ const Calculator = () => {
                         : "border-border hover:border-primary/40 bg-card"
                     )}
                   >
-                    {/* Color accent bar */}
-                    <div className={cn("absolute left-0 top-0 bottom-0 w-1 transition-all", station.color, station.selected ? "opacity-100" : "opacity-40")} />
-                    
-                    <div className="pl-3">
-                      <div className="flex items-center gap-2 mb-1">
-                        <span className={cn("w-3 h-3 rounded-full", station.color)} />
-                        <span className="font-semibold text-foreground">{station.name}</span>
-                      </div>
-                      <div className="text-sm text-muted-foreground">{station.frequency}</div>
-                      <div className="flex items-center justify-between mt-2">
-                        <span className="text-xs text-muted-foreground">{station.city}</span>
-                        <div className="flex items-center gap-1 text-xs">
-                          <Users className="w-3 h-3 text-primary" />
-                          <span className="text-primary font-medium">{station.dailyReach.toLocaleString()}</span>
+                    <div className="flex items-center gap-3">
+                      <img 
+                        src={station.logo} 
+                        alt={station.name}
+                        className="w-12 h-12 object-contain rounded-lg bg-white"
+                      />
+                      <div className="flex-1 min-w-0">
+                        <span className="font-semibold text-foreground block">{station.name}</span>
+                        <div className="text-sm text-muted-foreground">{station.frequency}</div>
+                        <div className="flex items-center justify-between mt-1">
+                          <span className="text-xs text-muted-foreground">{station.city}</span>
+                          <div className="flex items-center gap-1 text-xs">
+                            <Users className="w-3 h-3 text-primary" />
+                            <span className="text-primary font-medium">{station.dailyReach.toLocaleString()}</span>
+                          </div>
                         </div>
                       </div>
                     </div>

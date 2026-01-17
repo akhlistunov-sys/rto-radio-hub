@@ -1,5 +1,13 @@
 import { BarChart3, Users, Radio, TrendingUp } from "lucide-react";
 
+// Import logos
+import logoRetro from "@/assets/radio-retro.png";
+import logoDacha from "@/assets/radio-dacha.jpg";
+import logoHumor from "@/assets/radio-humor.png";
+import logoLove from "@/assets/radio-love.png";
+import logoShanson from "@/assets/radio-shanson.jpg";
+import logoAutoradio from "@/assets/radio-autoradio.jpg";
+
 const stats = [
   { label: "Охват аудитории", value: "150 000+", icon: Users, description: "слушателей ежедневно" },
   { label: "Радиостанций", value: "6", icon: Radio, description: "в 2 городах" },
@@ -8,12 +16,12 @@ const stats = [
 ];
 
 const audienceData = [
-  { station: "Ретро FM", reach: 2596, color: "bg-retro-fm" },
-  { station: "Радио Дача", reach: 2343, color: "bg-radio-dacha" },
-  { station: "Радио Шансон", reach: 2081, color: "bg-shanson" },
-  { station: "Авторадио", reach: 2343, color: "bg-avtoradio" },
-  { station: "Юмор FM", reach: 1514, color: "bg-humor-fm" },
-  { station: "Love Radio", reach: 1009, color: "bg-love-radio" },
+  { station: "Ретро FM", reach: 2596, logo: logoRetro },
+  { station: "Радио Дача", reach: 2343, logo: logoDacha },
+  { station: "Радио Шансон", reach: 2081, logo: logoShanson },
+  { station: "Авторадио", reach: 2343, logo: logoAutoradio },
+  { station: "Юмор FM", reach: 1514, logo: logoHumor },
+  { station: "Love Radio", reach: 1009, logo: logoLove },
 ];
 
 const maxReach = Math.max(...audienceData.map(d => d.reach));
@@ -52,15 +60,19 @@ const Statistics = () => {
                 style={{ animationDelay: `${index * 50}ms` }}
               >
                 <div className="flex items-center justify-between text-sm">
-                  <div className="flex items-center gap-2">
-                    <span className={`w-3 h-3 rounded-full ${item.color}`} />
+                  <div className="flex items-center gap-3">
+                    <img 
+                      src={item.logo} 
+                      alt={item.station}
+                      className="w-8 h-8 object-contain rounded-lg bg-white"
+                    />
                     <span className="font-medium text-foreground">{item.station}</span>
                   </div>
                   <span className="text-primary font-semibold">~{item.reach.toLocaleString()}</span>
                 </div>
                 <div className="h-3 bg-secondary rounded-full overflow-hidden">
                   <div 
-                    className={`h-full ${item.color} rounded-full transition-all duration-1000 ease-out`}
+                    className="h-full bg-primary rounded-full transition-all duration-1000 ease-out"
                     style={{ width: `${(item.reach / maxReach) * 100}%` }}
                   />
                 </div>
