@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Phone, Mail, Send, ChevronDown } from "lucide-react";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { cn } from "@/lib/utils";
+import retroFmLogo from "@/assets/radio-logos-1.png";
+import radioDachaLogo from "@/assets/radio-logos-2.png";
 
 interface RadioStation {
   id: string;
@@ -11,6 +13,7 @@ interface RadioStation {
   color: string;
   description: string;
   format: string;
+  logo: string;
 }
 
 const radioStations: RadioStation[] = [
@@ -22,6 +25,7 @@ const radioStations: RadioStation[] = [
     color: "bg-retro-fm",
     description: "Станция для ностальгических хитов, вызывающая сильный эмоциональный отклик у слушателей.",
     format: "Ностальгические хиты 70-90х",
+    logo: retroFmLogo,
   },
   {
     id: "radio-dacha",
@@ -31,6 +35,7 @@ const radioStations: RadioStation[] = [
     color: "bg-radio-dacha",
     description: "Семейный формат, ориентированный на уют и спокойствие для всей семьи.",
     format: "Семейный формат",
+    logo: radioDachaLogo,
   },
   {
     id: "humor-fm",
@@ -40,6 +45,7 @@ const radioStations: RadioStation[] = [
     color: "bg-humor-fm",
     description: "Позитивный формат со смехом и легким настроением для активных слушателей.",
     format: "Юмор и хиты",
+    logo: retroFmLogo,
   },
   {
     id: "love-radio",
@@ -49,6 +55,7 @@ const radioStations: RadioStation[] = [
     color: "bg-love-radio",
     description: "Драйвовая и романтичная станция для молодежи с современными хитами.",
     format: "Молодёжный формат",
+    logo: radioDachaLogo,
   },
   {
     id: "shanson",
@@ -58,6 +65,7 @@ const radioStations: RadioStation[] = [
     color: "bg-shanson",
     description: "Станция с «честными историями», которую предпочитают преимущественно мужчины.",
     format: "Русский шансон",
+    logo: retroFmLogo,
   },
   {
     id: "avtoradio",
@@ -67,6 +75,7 @@ const radioStations: RadioStation[] = [
     color: "bg-avtoradio",
     description: "Музыка и новости для автомобилистов — всегда в курсе событий за рулём.",
     format: "Авто-формат",
+    logo: radioDachaLogo,
   },
 ];
 
@@ -109,12 +118,10 @@ const Sidebar = () => {
                 style={{ animationDelay: `${index * 50}ms` }}
               >
                 <div className="flex items-start gap-3">
-                  <div
-                    className={cn(
-                      "w-3 h-3 rounded-full mt-1.5 ring-2 ring-offset-2 ring-offset-card transition-all",
-                      station.color,
-                      openStation === station.id ? "ring-primary" : "ring-transparent group-hover:ring-current"
-                    )}
+                  <img 
+                    src={station.logo} 
+                    alt={station.name}
+                    className="w-10 h-10 rounded-lg object-contain bg-white"
                   />
                   <div className="flex-1 min-w-0">
                     <h3 className="font-medium text-sm text-foreground group-hover:text-primary transition-colors">
