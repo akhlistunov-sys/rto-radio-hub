@@ -5,6 +5,14 @@ import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
 import { cn } from "@/lib/utils";
 
+// Import logos
+import logoRetro from "@/assets/radio-retro.png";
+import logoDacha from "@/assets/radio-dacha.jpg";
+import logoHumor from "@/assets/radio-humor.png";
+import logoLove from "@/assets/radio-love.png";
+import logoShanson from "@/assets/radio-shanson.jpg";
+import logoAutoradio from "@/assets/radio-autoradio.jpg";
+
 interface Station {
   id: string;
   name: string;
@@ -13,40 +21,30 @@ interface Station {
   color: string;
   dailyReach: number;
   selected: boolean;
+  logo: string;
 }
 
 const initialStations: Station[] = [
-  { id: "retro-fm", name: "Ретро FM", frequency: "89.0 МГц", city: "Ялуторовск", color: "bg-retro-fm", dailyReach: 2596, selected: true },
-  { id: "radio-dacha", name: "Радио Дача", frequency: "105.9 МГц", city: "Ялуторовск", color: "bg-radio-dacha", dailyReach: 2343, selected: true },
-  { id: "humor-fm", name: "Юмор FM", frequency: "93.9 МГц", city: "Ялуторовск", color: "bg-humor-fm", dailyReach: 1514, selected: false },
-  { id: "love-radio", name: "Love Radio", frequency: "88.1 / 92.2 МГц", city: "Ялуторовск, Заводоуковск", color: "bg-love-radio", dailyReach: 1009, selected: false },
-  { id: "shanson", name: "Радио Шансон", frequency: "101.0 МГц", city: "Заводоуковск", color: "bg-shanson", dailyReach: 2081, selected: false },
-  { id: "avtoradio", name: "Авторадио", frequency: "105.3 МГц", city: "Заводоуковск", color: "bg-avtoradio", dailyReach: 2343, selected: true },
+  { id: "retro-fm", name: "Ретро FM", frequency: "89.0 МГц", city: "Ялуторовск", color: "bg-retro-fm", dailyReach: 2596, selected: true, logo: logoRetro },
+  { id: "radio-dacha", name: "Радио Дача", frequency: "105.9 МГц", city: "Ялуторовск", color: "bg-radio-dacha", dailyReach: 2343, selected: true, logo: logoDacha },
+  { id: "humor-fm", name: "Юмор FM", frequency: "93.9 МГц", city: "Ялуторовск", color: "bg-humor-fm", dailyReach: 1514, selected: false, logo: logoHumor },
+  { id: "love-radio", name: "Love Radio", frequency: "88.1 / 92.2 МГц", city: "Ялуторовск, Заводоуковск", color: "bg-love-radio", dailyReach: 1009, selected: false, logo: logoLove },
+  { id: "shanson", name: "Радио Шансон", frequency: "101.0 МГц", city: "Заводоуковск", color: "bg-shanson", dailyReach: 2081, selected: false, logo: logoShanson },
+  { id: "avtoradio", name: "Авторадио", frequency: "105.3 МГц", city: "Заводоуковск", color: "bg-avtoradio", dailyReach: 2343, selected: true, logo: logoAutoradio },
 ];
 
 const timeSlots = [
-  { label: "07:00", time: "07:00-08:00", multiplier: 1.2 },
-  { label: "08:00", time: "08:00-09:00", multiplier: 1.3 },
-  { label: "09:00", time: "09:00-10:00", multiplier: 1.2 },
-  { label: "10:00", time: "10:00-11:00", multiplier: 1.0 },
-  { label: "11:00", time: "11:00-12:00", multiplier: 1.0 },
-  { label: "12:00", time: "12:00-13:00", multiplier: 1.1 },
-  { label: "13:00", time: "13:00-14:00", multiplier: 1.1 },
-  { label: "14:00", time: "14:00-15:00", multiplier: 1.0 },
-  { label: "15:00", time: "15:00-16:00", multiplier: 1.0 },
-  { label: "16:00", time: "16:00-17:00", multiplier: 1.2 },
-  { label: "17:00", time: "17:00-18:00", multiplier: 1.3 },
-  { label: "18:00", time: "18:00-19:00", multiplier: 1.3 },
-  { label: "19:00", time: "19:00-20:00", multiplier: 1.2 },
-  { label: "20:00", time: "20:00-21:00", multiplier: 0.9 },
-  { label: "21:00", time: "21:00-22:00", multiplier: 0.8 },
+  { label: "Утро", time: "07:00-10:00", multiplier: 1.2, icon: "🌅" },
+  { label: "День", time: "10:00-16:00", multiplier: 1.0, icon: "☀️" },
+  { label: "Вечер", time: "16:00-20:00", multiplier: 1.3, icon: "🌆" },
+  { label: "Ночь", time: "20:00-23:00", multiplier: 0.8, icon: "🌙" },
 ];
 
 const Calculator = () => {
   const [days, setDays] = useState(30);
   const [duration, setDuration] = useState(20);
   const [stations, setStations] = useState(initialStations);
-  const [selectedSlots, setSelectedSlots] = useState<string[]>(["08:00", "12:00", "17:00"]);
+  const [selectedSlots, setSelectedSlots] = useState<string[]>(["Утро", "День", "Вечер"]);
 
   const selectedStations = stations.filter(s => s.selected);
   const totalReach = selectedStations.reduce((sum, s) => sum + s.dailyReach * days, 0);
@@ -119,14 +117,14 @@ const Calculator = () => {
                 <Slider
                   value={[duration]}
                   onValueChange={(value) => setDuration(value[0])}
-                  min={1}
-                  max={30}
-                  step={1}
+                  min={10}
+                  max={60}
+                  step={5}
                   className="py-2"
                 />
                 <div className="flex justify-between text-xs text-muted-foreground">
-                  <span>1 сек</span>
-                  <span>30 сек</span>
+                  <span>10 сек</span>
+                  <span>60 сек</span>
                 </div>
               </div>
             </div>
@@ -135,23 +133,25 @@ const Calculator = () => {
             <div className="glass-card p-6">
               <h3 className="font-medium text-foreground mb-4 flex items-center gap-2">
                 <Clock className="w-5 h-5 text-primary" />
-                Временные слоты
+                Время эфира
               </h3>
-              <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                 {timeSlots.map((slot) => (
                   <button
                     key={slot.label}
                     onClick={() => toggleSlot(slot.label)}
                     className={cn(
-                      "relative p-3 rounded-xl border-2 transition-all duration-300 text-center group",
+                      "relative p-4 rounded-2xl border-2 transition-all duration-300 text-center group",
                       selectedSlots.includes(slot.label)
                         ? "border-primary bg-primary/5 shadow-lg shadow-primary/10"
                         : "border-border hover:border-primary/40 bg-card"
                     )}
                   >
-                    <div className="font-medium text-foreground text-sm">{slot.label}</div>
+                    <div className="text-2xl mb-2">{slot.icon}</div>
+                    <div className="font-medium text-foreground">{slot.label}</div>
+                    <div className="text-xs text-muted-foreground">{slot.time}</div>
                     {selectedSlots.includes(slot.label) && (
-                      <div className="absolute top-1 right-1 w-2 h-2 rounded-full bg-primary animate-pulse" />
+                      <div className="absolute top-2 right-2 w-2 h-2 rounded-full bg-primary animate-pulse" />
                     )}
                   </button>
                 ))}
@@ -176,20 +176,21 @@ const Calculator = () => {
                         : "border-border hover:border-primary/40 bg-card"
                     )}
                   >
-                    {/* Color accent bar */}
-                    <div className={cn("absolute left-0 top-0 bottom-0 w-1 transition-all", station.color, station.selected ? "opacity-100" : "opacity-40")} />
-                    
-                    <div className="pl-3">
-                      <div className="flex items-center gap-2 mb-1">
-                        <span className={cn("w-3 h-3 rounded-full", station.color)} />
-                        <span className="font-semibold text-foreground">{station.name}</span>
-                      </div>
-                      <div className="text-sm text-muted-foreground">{station.frequency}</div>
-                      <div className="flex items-center justify-between mt-2">
-                        <span className="text-xs text-muted-foreground">{station.city}</span>
-                        <div className="flex items-center gap-1 text-xs">
-                          <Users className="w-3 h-3 text-primary" />
-                          <span className="text-primary font-medium">{station.dailyReach.toLocaleString()}</span>
+                    <div className="flex items-center gap-3">
+                      <img 
+                        src={station.logo} 
+                        alt={station.name}
+                        className="w-12 h-12 object-contain rounded-lg bg-white"
+                      />
+                      <div className="flex-1 min-w-0">
+                        <span className="font-semibold text-foreground block">{station.name}</span>
+                        <div className="text-sm text-muted-foreground">{station.frequency}</div>
+                        <div className="flex items-center justify-between mt-1">
+                          <span className="text-xs text-muted-foreground">{station.city}</span>
+                          <div className="flex items-center gap-1 text-xs">
+                            <Users className="w-3 h-3 text-primary" />
+                            <span className="text-primary font-medium">{station.dailyReach.toLocaleString()}</span>
+                          </div>
                         </div>
                       </div>
                     </div>
