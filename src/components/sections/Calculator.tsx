@@ -25,17 +25,28 @@ const initialStations: Station[] = [
 ];
 
 const timeSlots = [
-  { label: "Утро", time: "07:00-10:00", multiplier: 1.2, icon: "🌅" },
-  { label: "День", time: "10:00-16:00", multiplier: 1.0, icon: "☀️" },
-  { label: "Вечер", time: "16:00-20:00", multiplier: 1.3, icon: "🌆" },
-  { label: "Ночь", time: "20:00-23:00", multiplier: 0.8, icon: "🌙" },
+  { label: "07:00", time: "07:00-08:00", multiplier: 1.2 },
+  { label: "08:00", time: "08:00-09:00", multiplier: 1.3 },
+  { label: "09:00", time: "09:00-10:00", multiplier: 1.2 },
+  { label: "10:00", time: "10:00-11:00", multiplier: 1.0 },
+  { label: "11:00", time: "11:00-12:00", multiplier: 1.0 },
+  { label: "12:00", time: "12:00-13:00", multiplier: 1.1 },
+  { label: "13:00", time: "13:00-14:00", multiplier: 1.1 },
+  { label: "14:00", time: "14:00-15:00", multiplier: 1.0 },
+  { label: "15:00", time: "15:00-16:00", multiplier: 1.0 },
+  { label: "16:00", time: "16:00-17:00", multiplier: 1.2 },
+  { label: "17:00", time: "17:00-18:00", multiplier: 1.3 },
+  { label: "18:00", time: "18:00-19:00", multiplier: 1.3 },
+  { label: "19:00", time: "19:00-20:00", multiplier: 1.2 },
+  { label: "20:00", time: "20:00-21:00", multiplier: 0.9 },
+  { label: "21:00", time: "21:00-22:00", multiplier: 0.8 },
 ];
 
 const Calculator = () => {
   const [days, setDays] = useState(30);
   const [duration, setDuration] = useState(20);
   const [stations, setStations] = useState(initialStations);
-  const [selectedSlots, setSelectedSlots] = useState<string[]>(["Утро", "День", "Вечер"]);
+  const [selectedSlots, setSelectedSlots] = useState<string[]>(["08:00", "12:00", "17:00"]);
 
   const selectedStations = stations.filter(s => s.selected);
   const totalReach = selectedStations.reduce((sum, s) => sum + s.dailyReach * days, 0);
@@ -108,14 +119,14 @@ const Calculator = () => {
                 <Slider
                   value={[duration]}
                   onValueChange={(value) => setDuration(value[0])}
-                  min={10}
-                  max={60}
-                  step={5}
+                  min={1}
+                  max={30}
+                  step={1}
                   className="py-2"
                 />
                 <div className="flex justify-between text-xs text-muted-foreground">
-                  <span>10 сек</span>
-                  <span>60 сек</span>
+                  <span>1 сек</span>
+                  <span>30 сек</span>
                 </div>
               </div>
             </div>
@@ -124,25 +135,23 @@ const Calculator = () => {
             <div className="glass-card p-6">
               <h3 className="font-medium text-foreground mb-4 flex items-center gap-2">
                 <Clock className="w-5 h-5 text-primary" />
-                Время эфира
+                Временные слоты
               </h3>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
                 {timeSlots.map((slot) => (
                   <button
                     key={slot.label}
                     onClick={() => toggleSlot(slot.label)}
                     className={cn(
-                      "relative p-4 rounded-2xl border-2 transition-all duration-300 text-center group",
+                      "relative p-3 rounded-xl border-2 transition-all duration-300 text-center group",
                       selectedSlots.includes(slot.label)
                         ? "border-primary bg-primary/5 shadow-lg shadow-primary/10"
                         : "border-border hover:border-primary/40 bg-card"
                     )}
                   >
-                    <div className="text-2xl mb-2">{slot.icon}</div>
-                    <div className="font-medium text-foreground">{slot.label}</div>
-                    <div className="text-xs text-muted-foreground">{slot.time}</div>
+                    <div className="font-medium text-foreground text-sm">{slot.label}</div>
                     {selectedSlots.includes(slot.label) && (
-                      <div className="absolute top-2 right-2 w-2 h-2 rounded-full bg-primary animate-pulse" />
+                      <div className="absolute top-1 right-1 w-2 h-2 rounded-full bg-primary animate-pulse" />
                     )}
                   </button>
                 ))}
