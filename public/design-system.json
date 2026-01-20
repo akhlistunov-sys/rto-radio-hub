@@ -1,0 +1,238 @@
+{
+  "name": "РТО Radio Advertising Design System",
+  "version": "2.0.0",
+  "description": "Современный дизайн-система для рекламного агентства радиостанций",
+  
+  "colors": {
+    "brand": {
+      "primary": "hsl(262.1 83.3% 57.8%)",
+      "primary-foreground": "hsl(210 20% 98%)",
+      "description": "Основной фиолетовый цвет бренда"
+    },
+    "semantic": {
+      "background": "hsl(222.2 84% 4.9%)",
+      "foreground": "hsl(210 20% 98%)",
+      "card": "hsl(222.2 84% 4.9%)",
+      "border": "hsl(217.2 32.6% 17.5%)",
+      "muted": "hsl(217.2 32.6% 17.5%)",
+      "muted-foreground": "hsl(215 20.2% 65.1%)",
+      "secondary": "hsl(217.2 32.6% 17.5%)",
+      "accent": "hsl(217.2 32.6% 17.5%)"
+    },
+    "radioStations": {
+      "retro-fm": "#C8208E",
+      "radio-dacha": "#3BA4D8",
+      "humor-fm": "#FACC15",
+      "love-radio": "#E73335",
+      "shanson": "#1E3A8A",
+      "avtoradio": "#E73335"
+    }
+  },
+  
+  "typography": {
+    "fontFamily": {
+      "sans": "Inter, system-ui, sans-serif",
+      "display": "Inter, system-ui, sans-serif"
+    },
+    "scale": {
+      "xs": "0.75rem",
+      "sm": "0.875rem",
+      "base": "1rem",
+      "lg": "1.125rem",
+      "xl": "1.25rem",
+      "2xl": "1.5rem",
+      "3xl": "1.875rem",
+      "4xl": "2.25rem",
+      "5xl": "3rem",
+      "6xl": "3.75rem"
+    },
+    "fontWeight": {
+      "normal": 400,
+      "medium": 500,
+      "semibold": 600,
+      "bold": 700
+    }
+  },
+  
+  "spacing": {
+    "unit": "0.25rem",
+    "scale": {
+      "1": "0.25rem",
+      "2": "0.5rem",
+      "3": "0.75rem",
+      "4": "1rem",
+      "5": "1.25rem",
+      "6": "1.5rem",
+      "8": "2rem",
+      "10": "2.5rem",
+      "12": "3rem",
+      "16": "4rem"
+    }
+  },
+  
+  "borderRadius": {
+    "sm": "calc(0.5rem - 2px)",
+    "md": "calc(0.5rem)",
+    "lg": "0.5rem",
+    "xl": "0.75rem",
+    "2xl": "1rem",
+    "full": "9999px"
+  },
+  
+  "shadows": {
+    "sm": "0 1px 2px 0 rgb(0 0 0 / 0.05)",
+    "md": "0 4px 6px -1px rgb(0 0 0 / 0.1)",
+    "lg": "0 10px 15px -3px rgb(0 0 0 / 0.1)",
+    "xl": "0 20px 25px -5px rgb(0 0 0 / 0.1)",
+    "2xl": "0 25px 50px -12px rgb(0 0 0 / 0.25)"
+  },
+  
+  "animations": {
+    "fadeIn": {
+      "keyframes": {
+        "0%": { "opacity": 0, "transform": "translateY(10px)" },
+        "100%": { "opacity": 1, "transform": "translateY(0)" }
+      },
+      "duration": "0.3s",
+      "easing": "ease-out"
+    },
+    "scaleIn": {
+      "keyframes": {
+        "0%": { "transform": "scale(0.95)", "opacity": 0 },
+        "100%": { "transform": "scale(1)", "opacity": 1 }
+      },
+      "duration": "0.2s",
+      "easing": "ease-out"
+    },
+    "slideUp": {
+      "keyframes": {
+        "0%": { "opacity": 0, "transform": "translateY(20px)" },
+        "100%": { "opacity": 1, "transform": "translateY(0)" }
+      },
+      "duration": "0.4s",
+      "easing": "ease-out"
+    },
+    "pulse": {
+      "keyframes": {
+        "0%, 100%": { "opacity": 1 },
+        "50%": { "opacity": 0.5 }
+      },
+      "duration": "2s",
+      "easing": "cubic-bezier(0.4, 0, 0.6, 1)",
+      "iteration": "infinite"
+    },
+    "radioWave": {
+      "description": "Анимация расходящихся радиоволн",
+      "keyframes": {
+        "0%": { "scale": 1, "opacity": 0.7 },
+        "50%": { "scale": 1.8, "opacity": 0.25 },
+        "100%": { "scale": 2.5, "opacity": 0 }
+      },
+      "duration": "4s",
+      "easing": "ease-out",
+      "iteration": "infinite"
+    }
+  },
+  
+  "components": {
+    "glassCard": {
+      "background": "rgba(255, 255, 255, 0.05)",
+      "backdropFilter": "blur(12px)",
+      "border": "1px solid rgba(255, 255, 255, 0.1)",
+      "borderRadius": "1rem"
+    },
+    "button": {
+      "variants": {
+        "primary": {
+          "background": "hsl(var(--primary))",
+          "color": "hsl(var(--primary-foreground))",
+          "borderRadius": "0.75rem",
+          "padding": "0.75rem 1.5rem"
+        },
+        "outline": {
+          "background": "transparent",
+          "border": "1px solid hsl(var(--border))",
+          "color": "hsl(var(--foreground))"
+        }
+      }
+    },
+    "input": {
+      "background": "hsl(var(--background) / 0.8)",
+      "border": "1px solid hsl(var(--border))",
+      "borderRadius": "0.5rem",
+      "padding": "0.5rem 0.75rem"
+    },
+    "slider": {
+      "track": "hsl(var(--secondary))",
+      "range": "hsl(var(--primary))",
+      "thumb": "hsl(var(--background))"
+    }
+  },
+  
+  "layout": {
+    "container": {
+      "maxWidth": "1280px",
+      "padding": "1.5rem"
+    },
+    "grid": {
+      "columns": {
+        "sm": 1,
+        "md": 2,
+        "lg": 3,
+        "xl": 4
+      },
+      "gap": "1.5rem"
+    }
+  },
+  
+  "effects": {
+    "radioWaveAnimation": {
+      "description": "Анимированные радиоволны на hero секции",
+      "waves": 8,
+      "baseSize": 150,
+      "sizeIncrement": 120,
+      "color": "hsl(var(--primary))",
+      "opacity": [0.5, 0.25, 0],
+      "scale": [1, 1.8, 2.5],
+      "duration": "4s"
+    },
+    "floatingLogos": {
+      "description": "Орбитальные логотипы радиостанций",
+      "radius": 160,
+      "logoSize": "5rem",
+      "hoverScale": 1.3,
+      "floatAnimation": {
+        "y": [-8, 0, -8],
+        "duration": "2s"
+      }
+    },
+    "particles": {
+      "description": "Летающие частицы на фоне",
+      "count": 20,
+      "size": "0.5rem",
+      "color": "hsl(var(--primary) / 0.3)",
+      "animation": {
+        "y": [0, -30, 0],
+        "opacity": [0.3, 0.8, 0.3],
+        "scale": [1, 1.5, 1],
+        "duration": "3-5s"
+      }
+    }
+  },
+  
+  "breakpoints": {
+    "sm": "640px",
+    "md": "768px",
+    "lg": "1024px",
+    "xl": "1280px",
+    "2xl": "1536px"
+  },
+  
+  "zIndex": {
+    "dropdown": 50,
+    "sticky": 40,
+    "fixed": 30,
+    "overlay": 20,
+    "modal": 50
+  }
+}

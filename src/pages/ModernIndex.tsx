@@ -167,7 +167,7 @@ const ModernIndex = () => {
         </AnimatePresence>
       </main>
 
-      {/* Floating Radio Station Bar */}
+      {/* Floating Radio Station Bar - larger and more prominent */}
       {activeTab === "hero" && (
         <motion.div
           className="fixed bottom-8 left-1/2 -translate-x-1/2 z-40"
@@ -175,23 +175,23 @@ const ModernIndex = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1, duration: 0.5 }}
         >
-          <div className="glass-card rounded-full px-6 py-3 flex items-center gap-4 border border-border/50">
-            <span className="text-sm text-muted-foreground hidden sm:block">Наши станции:</span>
-            <div className="flex items-center gap-2">
+          <div className="glass-card rounded-2xl px-8 py-5 flex items-center gap-6 border border-border/50 shadow-2xl">
+            <span className="text-base font-medium text-foreground hidden sm:block">Наши станции:</span>
+            <div className="flex items-center gap-4">
               {radioStations.map((station, i) => (
                 <motion.div
                   key={station.name}
                   className="relative group"
-                  whileHover={{ scale: 1.2, zIndex: 10 }}
+                  whileHover={{ scale: 1.15, zIndex: 10 }}
                 >
                   <img
                     src={station.logo}
                     alt={station.name}
-                    className="w-10 h-10 rounded-lg bg-white p-0.5 object-contain cursor-pointer shadow-lg"
+                    className="w-14 h-14 rounded-xl bg-white p-1 object-contain cursor-pointer shadow-lg border border-white/50"
                   />
-                  <div className="absolute -top-12 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-                    <div className="glass-card px-3 py-1 rounded-lg whitespace-nowrap text-xs font-medium">
-                      {station.name} <span className="text-primary">{station.freq} FM</span>
+                  <div className="absolute -top-14 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                    <div className="glass-card px-4 py-2 rounded-xl whitespace-nowrap text-sm font-medium shadow-lg">
+                      {station.name} <span className="text-primary font-bold">{station.freq} FM</span>
                     </div>
                   </div>
                 </motion.div>
