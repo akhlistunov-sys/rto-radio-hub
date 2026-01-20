@@ -1,11 +1,11 @@
 import { motion } from "framer-motion";
-import { ArrowRight, Radio, Sparkles } from "lucide-react";
+import { ArrowRight, Radio } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import FloatingRadio3D from "./FloatingRadio3D";
 import SoundWaveVisualizer from "./SoundWaveVisualizer";
+import RadioWaveAnimation from "./RadioWaveAnimation";
 
 // Import logos
-import logoRTO from "@/assets/logo-rto.png";
 import logoRetro from "@/assets/radio-retro.png";
 import logoDacha from "@/assets/radio-dacha.jpg";
 import logoHumor from "@/assets/radio-humor.png";
@@ -13,7 +13,14 @@ import logoLove from "@/assets/radio-love.png";
 import logoShanson from "@/assets/radio-shanson.jpg";
 import logoAutoradio from "@/assets/radio-autoradio.jpg";
 
-const logos = [logoRetro, logoDacha, logoHumor, logoLove, logoShanson, logoAutoradio];
+const logos = [
+  { src: logoRetro, name: "Ретро FM", freq: "89.0" },
+  { src: logoDacha, name: "Радио Дача", freq: "105.9" },
+  { src: logoHumor, name: "Юмор FM", freq: "93.9" },
+  { src: logoLove, name: "Love Radio", freq: "88.1" },
+  { src: logoShanson, name: "Шансон", freq: "101.0" },
+  { src: logoAutoradio, name: "Авторадио", freq: "105.3" },
+];
 
 interface ModernHeroSectionProps {
   onNavigate: (tab: string) => void;
@@ -24,6 +31,9 @@ const ModernHeroSection = ({ onNavigate }: ModernHeroSectionProps) => {
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Animated background */}
       <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-primary/5" />
+      
+      {/* Radio Wave Animation - fills the hero section */}
+      <RadioWaveAnimation className="opacity-40" />
       
       {/* Grid pattern */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,hsl(var(--border)/0.3)_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--border)/0.3)_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_110%)]" />
@@ -60,18 +70,6 @@ const ModernHeroSection = ({ onNavigate }: ModernHeroSectionProps) => {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8 }}
             >
-              <motion.img 
-                src={logoRTO} 
-                alt="РТО" 
-                className="h-16 object-contain mb-6"
-                whileHover={{ scale: 1.05 }}
-              />
-              
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4">
-                <Sparkles className="w-4 h-4" />
-                Рекламное агентство
-              </div>
-              
               <h1 className="text-4xl md:text-6xl font-bold text-foreground leading-tight">
                 Ваш голос на
                 <span className="block text-transparent bg-clip-text bg-gradient-to-r from-primary to-love-radio">
@@ -125,20 +123,20 @@ const ModernHeroSection = ({ onNavigate }: ModernHeroSectionProps) => {
             </motion.div>
           </div>
 
-          {/* Right side - 3D Radio */}
+          {/* Right side - 3D Radio with larger logos */}
           <motion.div
             className="relative"
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            <FloatingRadio3D className="mb-8" />
+            <FloatingRadio3D className="mb-12 scale-110" />
             
-            {/* Orbiting logos */}
-            <div className="relative h-48 mx-auto w-full max-w-md">
+            {/* Orbiting logos - larger and more prominent */}
+            <div className="relative h-72 mx-auto w-full max-w-lg">
               {logos.map((logo, i) => {
                 const angle = (i * 60 - 90) * (Math.PI / 180);
-                const radius = 120;
+                const radius = 160;
                 const x = Math.cos(angle) * radius;
                 const y = Math.sin(angle) * radius;
                 
@@ -159,20 +157,28 @@ const ModernHeroSection = ({ onNavigate }: ModernHeroSectionProps) => {
                     }}
                     whileHover={{ scale: 1.3, zIndex: 10 }}
                   >
-                    <motion.img
-                      src={logo}
-                      alt={`Radio ${i}`}
-                      className="w-14 h-14 rounded-xl bg-white p-1 shadow-lg object-contain"
-                      animate={{
-                        y: [0, -5, 0],
-                      }}
-                      transition={{
-                        duration: 2,
-                        delay: i * 0.2,
-                        repeat: Infinity,
-                        ease: "easeInOut"
-                      }}
-                    />
+                    <div className="relative group cursor-pointer">
+                      <motion.img
+                        src={logo.src}
+                        alt={logo.name}
+                        className="w-20 h-20 rounded-2xl bg-white p-1.5 shadow-xl object-contain border-2 border-white/50"
+                        animate={{
+                          y: [0, -8, 0],
+                        }}
+                        transition={{
+                          duration: 2,
+                          delay: i * 0.2,
+                          repeat: Infinity,
+                          ease: "easeInOut"
+                        }}
+                      />
+                      {/* Tooltip on hover */}
+                      <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap">
+                        <div className="glass-card px-3 py-1.5 rounded-lg text-xs font-medium">
+                          {logo.name} <span className="text-primary">{logo.freq} FM</span>
+                        </div>
+                      </div>
+                    </div>
                   </motion.div>
                 );
               })}

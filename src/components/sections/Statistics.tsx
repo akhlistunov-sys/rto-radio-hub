@@ -29,48 +29,48 @@ const maxReach = Math.max(...audienceData.map(d => d.reach));
 const Statistics = () => {
   return (
     <section className="flex-1 p-6 overflow-y-auto animate-fade-in">
-      <div className="max-w-5xl mx-auto space-y-8">
-        {/* Stats Grid */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="max-w-4xl mx-auto space-y-6">
+        {/* Stats Grid - smaller */}
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
           {stats.map((stat, index) => (
             <div 
               key={stat.label} 
-              className="glass-card p-6 text-center animate-slide-up"
+              className="glass-card p-4 text-center animate-slide-up"
               style={{ animationDelay: `${index * 100}ms` }}
             >
-              <stat.icon className="w-8 h-8 text-primary mx-auto mb-3" />
-              <p className="text-3xl font-bold text-foreground mb-1">{stat.value}</p>
-              <p className="text-sm text-muted-foreground">{stat.description}</p>
+              <stat.icon className="w-6 h-6 text-primary mx-auto mb-2" />
+              <p className="text-2xl font-bold text-foreground mb-0.5">{stat.value}</p>
+              <p className="text-xs text-muted-foreground">{stat.description}</p>
             </div>
           ))}
         </div>
 
-        {/* Audience Chart */}
-        <div className="glass-card p-6">
-          <h2 className="text-lg font-semibold text-foreground mb-6 flex items-center gap-2">
-            <BarChart3 className="w-5 h-5 text-primary" />
+        {/* Audience Chart - smaller */}
+        <div className="glass-card p-4">
+          <h2 className="text-base font-semibold text-foreground mb-4 flex items-center gap-2">
+            <BarChart3 className="w-4 h-4 text-primary" />
             Охват аудитории по станциям (суточный)
           </h2>
           
-          <div className="space-y-4">
+          <div className="space-y-3">
             {audienceData.map((item, index) => (
               <div 
                 key={item.station} 
-                className="space-y-2 animate-slide-up"
+                className="space-y-1.5 animate-slide-up"
                 style={{ animationDelay: `${index * 50}ms` }}
               >
                 <div className="flex items-center justify-between text-sm">
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-2">
                     <img 
                       src={item.logo} 
                       alt={item.station}
-                      className="w-8 h-8 object-contain rounded-lg bg-white"
+                      className="w-6 h-6 object-contain rounded-md bg-white"
                     />
-                    <span className="font-medium text-foreground">{item.station}</span>
+                    <span className="font-medium text-foreground text-sm">{item.station}</span>
                   </div>
-                  <span className="text-primary font-semibold">~{item.reach.toLocaleString()}</span>
+                  <span className="text-primary font-semibold text-sm">~{item.reach.toLocaleString()}</span>
                 </div>
-                <div className="h-3 bg-secondary rounded-full overflow-hidden">
+                <div className="h-2 bg-secondary rounded-full overflow-hidden">
                   <div 
                     className="h-full bg-primary rounded-full transition-all duration-1000 ease-out"
                     style={{ width: `${(item.reach / maxReach) * 100}%` }}
