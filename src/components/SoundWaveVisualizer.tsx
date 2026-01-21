@@ -10,7 +10,7 @@ const SoundWaveVisualizer = ({
   color = "hsl(var(--primary))"
 }: SoundWaveVisualizerProps) => {
   return <div className={`flex items-end justify-center gap-1 h-16 ${className}`}>
-      {[...Array(bars)].map((_, i) => <motion.div key={i} className="w-1.5 rounded-full mb-0 px-0 pl-0 pr-0 ml-[6px] mr-0" style={{
+      {[...Array(bars)].map((_, i) => <motion.div key={i} className="w-1.5 rounded-full mb-0 px-0 pl-0 pr-0 mr-0 ml-0" style={{
       backgroundColor: color
     }} initial={{
       height: 8
