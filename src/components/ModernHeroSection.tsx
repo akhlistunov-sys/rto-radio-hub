@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
-import { ArrowRight, Radio } from "lucide-react";
+import { ArrowRight, Sparkles } from "lucide-react";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { Button } from "@/components/ui/button";
 import FloatingRadio3D from "./FloatingRadio3D";
 import SoundWaveVisualizer from "./SoundWaveVisualizer";
@@ -43,7 +44,11 @@ interface ModernHeroSectionProps {
 const ModernHeroSection = ({
   onNavigate
 }: ModernHeroSectionProps) => {
-  return <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+  const isMobile = useIsMobile();
+  const orbitRadius = isMobile ? 100 : 200;
+  const logoSize = isMobile ? "w-14 h-14" : "w-24 h-24";
+
+  return <section className="relative min-h-[85vh] flex items-center justify-center overflow-hidden">
       {/* Animated background */}
       <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-primary/5" />
       
@@ -106,9 +111,9 @@ const ModernHeroSection = ({
           }} transition={{
             delay: 0.5
           }}>
-              <Button size="lg" className="gap-2 text-base h-14 px-8" onClick={() => onNavigate("calculator")}>
-                <Radio className="w-5 h-5" />
-                Рассчитать стоимость
+              <Button size="lg" className="gap-2 text-base h-14 px-8" onClick={() => onNavigate("planner")}>
+                <Sparkles className="w-5 h-5" />
+                Магия ИИ
                 <ArrowRight className="w-4 h-4" />
               </Button>
               <Button size="lg" variant="outline" className="h-14 px-8" onClick={() => onNavigate("about")}>
@@ -117,7 +122,7 @@ const ModernHeroSection = ({
             </motion.div>
 
             {/* Sound wave */}
-            <motion.div initial={{
+            <motion.div className="max-w-md" initial={{
             opacity: 0
           }} animate={{
             opacity: 1
@@ -145,9 +150,8 @@ const ModernHeroSection = ({
             <div className="relative h-72 mx-auto w-full max-w-lg">
               {logos.map((logo, i) => {
               const angle = (i * 60 - 90) * (Math.PI / 180);
-              const radius = 160;
-              const x = Math.cos(angle) * radius;
-              const y = Math.sin(angle) * radius;
+              const x = Math.cos(angle) * orbitRadius;
+              const y = Math.sin(angle) * orbitRadius;
               return <motion.div key={i} className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" initial={{
                 opacity: 0,
                 scale: 0
@@ -164,7 +168,7 @@ const ModernHeroSection = ({
                 zIndex: 10
               }}>
                     <div className="relative group cursor-pointer">
-                      <motion.img src={logo.src} alt={logo.name} className="w-20 h-20 rounded-2xl bg-white p-1.5 shadow-xl object-contain border-2 border-white/50" animate={{
+                      <motion.img src={logo.src} alt={logo.name} className={`${logoSize} rounded-2xl bg-white p-1.5 shadow-xl object-contain border-2 border-white/50`} animate={{
                     y: [0, -8, 0]
                   }} transition={{
                     duration: 2,

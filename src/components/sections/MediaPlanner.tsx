@@ -138,8 +138,8 @@ const MediaPlanner = () => {
                 </>
               ) : (
                 <>
-                  <Send className="w-4 h-4" />
-                  Получить медиаплан
+                  <Sparkles className="w-4 h-4" />
+                  Рекомендации ИИ
                 </>
               )}
             </Button>
