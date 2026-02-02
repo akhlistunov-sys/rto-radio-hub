@@ -25,7 +25,7 @@ export function generateMediaPlanJSON(
   const slotsCount = Math.ceil(aiResponse.calculation.spots_per_day / stationsCount);
   const duration = 20;
   
-  // Determine price tier
+  // Determine price tier based on JSON formulas
   let appliedPrice = 1.5;
   if (stationsCount >= 6) appliedPrice = 1.1;
   else if (stationsCount >= 5) appliedPrice = 1.2;
@@ -33,6 +33,8 @@ export function generateMediaPlanJSON(
 
   const costPerSpot = duration * appliedPrice;
   const baseCost = costPerSpot * aiResponse.calculation.total_spots;
+  
+  // 5% discount if all 15 slots selected
   const bonusDiscount = slotsCount >= 15 ? 0.05 : 0;
   const airCostAfterDiscounts = baseCost * (1 - bonusDiscount);
 
@@ -60,8 +62,8 @@ export function generateMediaPlanJSON(
       selected_time_slots: Array.from({ length: slotsCount }, (_, i) => i),
       campaign_days: aiResponse.calculation.campaign_days,
       duration: duration,
-      production_option: "standard",
-      production_cost: 2000,
+      production_option: "gift", // Ролик в подарок
+      production_cost: 0, // Бесплатно
     },
     constants_used: {
       station_listeners: STATION_LISTENERS,
@@ -96,9 +98,9 @@ export function generateMediaPlanJSON(
     final_output: {
       financials: {
         base_price: aiResponse.calculation.estimated_cost,
-        discount: 0,
+        discount: bonusDiscount * 100,
         final_price: aiResponse.calculation.estimated_cost,
-        production_cost_included: 2000,
+        production_cost_included: 0, // Ролик в подарок
       },
       metrics: {
         daily_coverage_people: dailyCoverage,
@@ -135,6 +137,7 @@ export function exportToExcel(mediaPlan: MediaPlanJSON): void {
     ["", ""],
     ["ФИНАНСОВЫЕ ПОКАЗАТЕЛИ", ""],
     ["Стоимость кампании", mediaPlan.final_output.display_strings.price_text],
+    ["Производство ролика", "Бесплатно (подарок)"],
     ["Охват аудитории", mediaPlan.final_output.display_strings.reach_text],
     ["Стоимость контакта", mediaPlan.final_output.display_strings.cpc_text],
     ["Всего выходов", mediaPlan.intermediate_calculations.spots_logic.total_spots_period],

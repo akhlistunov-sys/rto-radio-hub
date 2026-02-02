@@ -1,10 +1,21 @@
-import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface FloatingRadio3DProps {
   className?: string;
 }
 
+const frequencies = ["89.0", "105.9", "93.9", "88.1", "101.0", "105.3"];
+
 const FloatingRadio3D = ({ className = "" }: FloatingRadio3DProps) => {
+  const [freqIndex, setFreqIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setFreqIndex((prev) => (prev + 1) % frequencies.length);
+    }, 2500);
+    return () => clearInterval(interval);
+  }, []);
   return (
     <div className={`relative ${className}`} style={{ perspective: "1000px" }}>
       {/* 3D Radio Body */}
@@ -26,13 +37,18 @@ const FloatingRadio3D = ({ className = "" }: FloatingRadio3DProps) => {
           {/* Display screen */}
           <div className="absolute top-3 left-3 right-3 h-12 bg-gradient-to-br from-emerald-900 to-emerald-950 rounded-lg border border-emerald-700 overflow-hidden">
             {/* Frequency display */}
-            <motion.div
-              className="h-full flex items-center justify-center font-mono text-emerald-400 text-xl font-bold"
-              animate={{ opacity: [1, 0.7, 1] }}
-              transition={{ duration: 2, repeat: Infinity }}
-            >
-              FM 89.0
-            </motion.div>
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={freqIndex}
+                className="h-full flex items-center justify-center font-mono text-emerald-400 text-xl font-bold"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.3 }}
+              >
+                FM {frequencies[freqIndex]}
+              </motion.div>
+            </AnimatePresence>
             {/* Scan line */}
             <motion.div
               className="absolute top-0 left-0 right-0 h-0.5 bg-emerald-300/40"
