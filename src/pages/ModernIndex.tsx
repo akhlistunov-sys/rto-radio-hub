@@ -188,22 +188,7 @@ const ModernIndex = () => {
       delay: 1,
       duration: 0.5
     }}>
-          <div className="glass-card rounded-2xl px-4 md:px-8 py-3 md:py-5 flex items-center gap-3 md:gap-6 border border-border/50 shadow-2xl overflow-x-auto">
-            <span className="text-sm md:text-base font-medium text-foreground hidden sm:block whitespace-nowrap">Наши станции:</span>
-            <div className="flex items-center gap-2 md:gap-4">
-              {radioStations.map((station, i) => <motion.div key={station.name} className="relative group flex-shrink-0" whileHover={{
-            scale: 1.15,
-            zIndex: 10
-          }}>
-                  <img src={station.logo} alt={station.name} className="w-10 h-10 md:w-16 md:h-16 rounded-lg md:rounded-xl bg-white p-0.5 md:p-1 object-contain cursor-pointer shadow-lg border border-white/50" />
-                  <div className="absolute -top-14 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none hidden md:block">
-                    <div className="glass-card px-4 py-2 rounded-xl whitespace-nowrap text-sm font-medium shadow-lg">
-                      {station.name} <span className="text-primary font-bold">{station.freq} FM</span>
-                    </div>
-                  </div>
-                </motion.div>)}
-            </div>
-          </div>
+          
         </motion.div>}
 
       {/* Footer */}
