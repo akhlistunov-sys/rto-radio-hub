@@ -6,10 +6,12 @@ const corsHeaders = {
 };
 
 interface MediaPlanRequest {
+  type?: "calculator_request" | "media_plan";
   clientEmail: string;
   clientName: string;
   clientPhone?: string;
-  mediaPlan: {
+  clientData?: Record<string, any>;
+  mediaPlan?: {
     strategy: {
       title: string;
       description: string;
@@ -38,7 +40,7 @@ interface MediaPlanRequest {
       cost_per_contact: number;
     };
   };
-  originalQuery: string;
+  originalQuery?: string;
 }
 
 const ADMIN_EMAIL = "a.khlistunov@gmail.com";
@@ -49,9 +51,10 @@ serve(async (req) => {
   }
 
   try {
-    const { clientEmail, clientName, clientPhone, mediaPlan, originalQuery }: MediaPlanRequest = await req.json();
+    const data: MediaPlanRequest = await req.json();
+    const { type, clientEmail, clientName, clientPhone, clientData, mediaPlan, originalQuery } = data;
 
-    if (!clientEmail || !clientName || !mediaPlan) {
+    if (!clientEmail || !clientName) {
       return new Response(
         JSON.stringify({ error: "Missing required fields" }),
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
@@ -59,6 +62,201 @@ serve(async (req) => {
     }
 
     const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
+    const results = { clientEmailSent: false, adminEmailSent: false };
+
+    // Handle calculator request
+    if (type === "calculator_request" && clientData) {
+      const calculatorClientHtml = `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+          <h1 style="color: #C8208E;">Спасибо за заявку!</h1>
+          
+          <p>Здравствуйте, ${clientName}!</p>
+          <p>Мы получили вашу заявку на расчёт рекламной кампании. Наш менеджер свяжется с вами в ближайшее время.</p>
+          
+          <div style="background: #e8f5e9; padding: 15px; border-radius: 8px; margin: 15px 0;">
+            <p style="margin: 0; font-size: 16px;">🎁 <strong>Ролик в подарок!</strong> Производство рекламного ролика бесплатно.</p>
+          </div>
+          
+          <h2 style="color: #333;">📊 Ваш расчёт:</h2>
+          <table style="width: 100%; border-collapse: collapse;">
+            <tr style="background: #C8208E; color: white;">
+              <td style="padding: 10px;">Параметр</td>
+              <td style="padding: 10px;">Значение</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #ddd;">
+              <td style="padding: 10px;">Радиостанции</td>
+              <td style="padding: 10px;">${clientData.stations} (${clientData.stationsCount} шт.)</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #ddd;">
+              <td style="padding: 10px;">Время эфира</td>
+              <td style="padding: 10px;">${clientData.slotsCount} слотов</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #ddd;">
+              <td style="padding: 10px;">Срок размещения</td>
+              <td style="padding: 10px;">${clientData.days} дней</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #ddd;">
+              <td style="padding: 10px;">Хронометраж ролика</td>
+              <td style="padding: 10px;">${clientData.duration} сек</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #ddd;">
+              <td style="padding: 10px;">Всего выходов</td>
+              <td style="padding: 10px;">${clientData.totalSpots}</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #ddd;">
+              <td style="padding: 10px;">Охват аудитории</td>
+              <td style="padding: 10px;">~${clientData.totalReach?.toLocaleString()} чел.</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #ddd; background: #f5f5f5;">
+              <td style="padding: 10px;"><strong>Стоимость кампании</strong></td>
+              <td style="padding: 10px; font-weight: bold; color: #C8208E; font-size: 18px;">${clientData.finalPrice?.toLocaleString()} ₽</td>
+            </tr>
+            ${clientData.isMaxCoverage ? '<tr style="border-bottom: 1px solid #ddd;"><td style="padding: 10px;">Скидка</td><td style="padding: 10px; color: green;">5% за макс. охват</td></tr>' : ''}
+            <tr>
+              <td style="padding: 10px;">Стоимость контакта</td>
+              <td style="padding: 10px;">${clientData.costPerContact} ₽</td>
+            </tr>
+          </table>
+          
+          <div style="margin-top: 30px; padding: 20px; background: #f0f9ff; border-radius: 8px;">
+            <p style="margin: 0;"><strong>Свяжитесь с нами:</strong></p>
+            <p style="margin: 5px 0;">📞 8 (34535) 5-01-51</p>
+            <p style="margin: 5px 0;">📧 yaradio@bk.ru</p>
+            <p style="margin: 5px 0;">💬 <a href="https://t.me/YaRadioBot">Telegram</a></p>
+          </div>
+        </div>
+      `;
+
+      const calculatorAdminHtml = `
+        <div style="font-family: Arial, sans-serif; max-width: 700px; margin: 0 auto;">
+          <h1 style="color: #C8208E;">🧮 Новая заявка из калькулятора!</h1>
+          
+          <div style="background: #fff3cd; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #ffc107;">
+            <h2 style="margin-top: 0; color: #856404;">📋 Данные клиента:</h2>
+            <table style="width: 100%;">
+              <tr><td style="padding: 5px 0;"><strong>Имя:</strong></td><td>${clientName}</td></tr>
+              <tr><td style="padding: 5px 0;"><strong>Email:</strong></td><td><a href="mailto:${clientEmail}">${clientEmail}</a></td></tr>
+              <tr><td style="padding: 5px 0;"><strong>Телефон:</strong></td><td>${clientData.phone || 'Не указан'}</td></tr>
+            </table>
+          </div>
+          
+          <h2>📊 Параметры расчёта:</h2>
+          <table style="width: 100%; border-collapse: collapse; margin: 10px 0;">
+            <tr style="background: #4CAF50; color: white;">
+              <th style="padding: 10px; text-align: left;">Параметр</th>
+              <th style="padding: 10px; text-align: right;">Значение</th>
+            </tr>
+            <tr style="border-bottom: 1px solid #ddd;">
+              <td style="padding: 10px;">Радиостанции</td>
+              <td style="padding: 10px; text-align: right;">${clientData.stations}</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #ddd;">
+              <td style="padding: 10px;">Количество станций</td>
+              <td style="padding: 10px; text-align: right;">${clientData.stationsCount}</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #ddd;">
+              <td style="padding: 10px;">Время эфира</td>
+              <td style="padding: 10px; text-align: right;">${clientData.timeSlots}</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #ddd;">
+              <td style="padding: 10px;">Слотов</td>
+              <td style="padding: 10px; text-align: right;">${clientData.slotsCount}</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #ddd;">
+              <td style="padding: 10px;">Срок размещения</td>
+              <td style="padding: 10px; text-align: right;">${clientData.days} дней</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #ddd;">
+              <td style="padding: 10px;">Хронометраж ролика</td>
+              <td style="padding: 10px; text-align: right;">${clientData.duration} сек</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #ddd;">
+              <td style="padding: 10px;">Тариф за секунду</td>
+              <td style="padding: 10px; text-align: right;">${clientData.pricePerSec} ₽</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #ddd;">
+              <td style="padding: 10px;">Всего выходов</td>
+              <td style="padding: 10px; text-align: right;">${clientData.totalSpots}</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #ddd;">
+              <td style="padding: 10px;">Охват аудитории</td>
+              <td style="padding: 10px; text-align: right;">~${clientData.totalReach?.toLocaleString()} чел.</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #ddd; background: #e8f5e9;">
+              <td style="padding: 10px;"><strong>Стоимость кампании</strong></td>
+              <td style="padding: 10px; text-align: right; font-weight: bold; color: #C8208E; font-size: 18px;">${clientData.finalPrice?.toLocaleString()} ₽</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #ddd;">
+              <td style="padding: 10px;">Скидка за макс. охват</td>
+              <td style="padding: 10px; text-align: right;">${clientData.bonusDiscount}</td>
+            </tr>
+            <tr>
+              <td style="padding: 10px;">Стоимость контакта</td>
+              <td style="padding: 10px; text-align: right;">${clientData.costPerContact} ₽</td>
+            </tr>
+          </table>
+
+          <div style="margin-top: 30px; padding: 15px; background: #ffebee; border-radius: 8px; text-align: center;">
+            <p style="margin: 0; font-size: 14px;">⏰ Заявка получена: ${new Date().toLocaleString('ru-RU', { timeZone: 'Asia/Yekaterinburg' })} (Екатеринбург)</p>
+          </div>
+        </div>
+      `;
+
+      if (RESEND_API_KEY) {
+        // Send to client
+        try {
+          const clientResponse = await fetch("https://api.resend.com/emails", {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${RESEND_API_KEY}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              from: "РТО <onboarding@resend.dev>",
+              to: [clientEmail],
+              subject: "Ваш расчёт рекламной кампании от РТО",
+              html: calculatorClientHtml,
+            }),
+          });
+          results.clientEmailSent = clientResponse.ok;
+        } catch (e) {
+          console.error("Failed to send client email:", e);
+        }
+
+        // Send to admin
+        try {
+          const adminResponse = await fetch("https://api.resend.com/emails", {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${RESEND_API_KEY}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              from: "РТО Сайт <onboarding@resend.dev>",
+              to: [ADMIN_EMAIL],
+              subject: `🧮 Калькулятор: ${clientName} | ${clientData.finalPrice?.toLocaleString()} ₽`,
+              html: calculatorAdminHtml,
+            }),
+          });
+          results.adminEmailSent = adminResponse.ok;
+        } catch (e) {
+          console.error("Failed to send admin email:", e);
+        }
+      }
+
+      return new Response(
+        JSON.stringify({ success: true, emailResults: results }),
+        { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    // Handle media plan request (original functionality)
+    if (!mediaPlan) {
+      return new Response(
+        JSON.stringify({ error: "Missing media plan data" }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
     
     // Generate HTML for media plan (for client)
     const mediaPlanHtml = `
@@ -241,7 +439,7 @@ serve(async (req) => {
       </div>
     `;
 
-    const results = { clientEmailSent: false, adminEmailSent: false };
+    const mediaPlanResults = { clientEmailSent: false, adminEmailSent: false };
 
     if (RESEND_API_KEY) {
       // Send to client
@@ -259,7 +457,7 @@ serve(async (req) => {
             html: mediaPlanHtml,
           }),
         });
-        results.clientEmailSent = clientResponse.ok;
+        mediaPlanResults.clientEmailSent = clientResponse.ok;
       } catch (e) {
         console.error("Failed to send client email:", e);
       }
@@ -279,7 +477,7 @@ serve(async (req) => {
             html: adminHtml,
           }),
         });
-        results.adminEmailSent = adminResponse.ok;
+        mediaPlanResults.adminEmailSent = adminResponse.ok;
       } catch (e) {
         console.error("Failed to send admin email:", e);
       }
@@ -291,7 +489,7 @@ serve(async (req) => {
       JSON.stringify({ 
         success: true, 
         message: "Медиаплан сохранён",
-        emailResults: results 
+        emailResults: mediaPlanResults 
       }),
       { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );

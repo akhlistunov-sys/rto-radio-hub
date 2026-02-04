@@ -1,9 +1,11 @@
 import { useState } from "react";
-import { Radio, Calendar, Clock, Users, TrendingUp, Send, Sparkles, CheckSquare, Square } from "lucide-react";
+import { Radio, Calendar, Clock, Users, TrendingUp, Send, Sparkles, CheckSquare, Square, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
 import { cn } from "@/lib/utils";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "@/hooks/use-toast";
 
 // Import logos
 import logoRetro from "@/assets/radio-retro.png";
@@ -65,6 +67,12 @@ const Calculator = () => {
   const [duration, setDuration] = useState(20);
   const [stations, setStations] = useState(initialStations);
   const [timeSlots, setTimeSlots] = useState(initialTimeSlots);
+  
+  // Form state
+  const [formName, setFormName] = useState("");
+  const [formPhone, setFormPhone] = useState("");
+  const [formEmail, setFormEmail] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const selectedStations = stations.filter(s => s.selected);
   const selectedSlots = timeSlots.filter(s => s.selected);
@@ -129,6 +137,78 @@ const Calculator = () => {
 
   const allStationsSelected = stations.every(s => s.selected);
   const allSlotsSelected = timeSlots.every(s => s.selected);
+
+  const handleSubmit = async () => {
+    if (!formName.trim()) {
+      toast({
+        title: "Ошибка",
+        description: "Пожалуйста, введите ваше имя",
+        variant: "destructive"
+      });
+      return;
+    }
+    if (!formEmail.trim()) {
+      toast({
+        title: "Ошибка",
+        description: "Пожалуйста, введите email",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    setIsSubmitting(true);
+    
+    try {
+      const calculationData = {
+        name: formName,
+        phone: formPhone || "Не указан",
+        email: formEmail,
+        stations: selectedStations.map(s => s.name).join(", "),
+        stationsCount,
+        timeSlots: selectedSlots.map(s => s.time).join(", "),
+        slotsCount,
+        days,
+        duration,
+        pricePerSec,
+        totalSpots,
+        finalPrice,
+        totalReach,
+        costPerContact: costPerContact.toFixed(2),
+        isMaxCoverage,
+        bonusDiscount: isMaxCoverage ? "5%" : "0%"
+      };
+
+      const { error } = await supabase.functions.invoke("send-media-plan", {
+        body: {
+          type: "calculator_request",
+          clientData: calculationData,
+          clientEmail: formEmail,
+          clientName: formName
+        }
+      });
+
+      if (error) throw error;
+
+      toast({
+        title: "Заявка отправлена!",
+        description: "Мы свяжемся с вами в ближайшее время"
+      });
+
+      // Reset form
+      setFormName("");
+      setFormPhone("");
+      setFormEmail("");
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      toast({
+        title: "Ошибка отправки",
+        description: "Пожалуйста, попробуйте позже",
+        variant: "destructive"
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <section className="flex-1 p-4 md:p-6 overflow-y-auto animate-fade-in">
@@ -353,16 +433,35 @@ const Calculator = () => {
               <div className="space-y-3 pt-4 border-t border-border">
                 <h4 className="font-medium text-foreground text-center text-sm">Оставить заявку</h4>
                 <Input 
-                  placeholder="Ваше имя" 
+                  placeholder="Ваше имя *" 
+                  value={formName}
+                  onChange={(e) => setFormName(e.target.value)}
                   className="bg-background/80 border-border"
                 />
                 <Input 
-                  placeholder="Телефон" 
+                  placeholder="Телефон (необязательно)" 
+                  value={formPhone}
+                  onChange={(e) => setFormPhone(e.target.value)}
                   className="bg-background/80 border-border"
                 />
-                <Button className="w-full gap-2 h-12 text-base">
-                  <Send className="w-4 h-4" />
-                  Получить предложение
+                <Input 
+                  placeholder="Email *" 
+                  type="email"
+                  value={formEmail}
+                  onChange={(e) => setFormEmail(e.target.value)}
+                  className="bg-background/80 border-border"
+                />
+                <Button 
+                  className="w-full gap-2 h-12 text-base" 
+                  onClick={handleSubmit}
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? (
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                  ) : (
+                    <Send className="w-4 h-4" />
+                  )}
+                  {isSubmitting ? "Отправка..." : "Получить предложение"}
                 </Button>
                 <p className="text-xs text-center text-muted-foreground">
                   🎁 Ролик в подарок при заказе!
