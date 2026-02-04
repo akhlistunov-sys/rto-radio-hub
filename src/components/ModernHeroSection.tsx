@@ -1,5 +1,6 @@
-import { motion } from "framer-motion";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ArrowRight, Sparkles, X } from "lucide-react";
+import { useState } from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Button } from "@/components/ui/button";
 import FloatingRadio3D from "./FloatingRadio3D";
@@ -13,40 +14,50 @@ import logoHumor from "@/assets/radio-humor.png";
 import logoLove from "@/assets/radio-love.png";
 import logoShanson from "@/assets/radio-shanson.jpg";
 import logoAutoradio from "@/assets/radio-autoradio.jpg";
+
 const logos = [{
   src: logoRetro,
   name: "Ретро FM",
-  freq: "89.0"
+  freq: "89.0",
+  description: "Лучшие хиты 70-х, 80-х и 90-х. Ностальгия по золотой эпохе советской и зарубежной эстрады."
 }, {
   src: logoDacha,
   name: "Радио Дача",
-  freq: "105.9"
+  freq: "105.9",
+  description: "Зажигательные песни для отдыха и хорошего настроения. Популярная музыка для дачи, дороги и души."
 }, {
   src: logoHumor,
   name: "Юмор FM",
-  freq: "93.9"
+  freq: "93.9",
+  description: "Смех — лучшее лекарство! Стендапы, юмористические шоу, пародии и позитив 24 часа в сутки."
 }, {
   src: logoLove,
   name: "Love Radio",
-  freq: "88.1"
+  freq: "88.1 / 92.2",
+  description: "Самые романтичные хиты о любви. Музыка для влюблённых и тех, кто хочет ими стать."
 }, {
   src: logoShanson,
-  name: "Шансон",
-  freq: "101.0"
+  name: "Радио Шансон",
+  freq: "101.0",
+  description: "Настоящий шансон. Баллады, городской романс и истории о жизни без прикрас."
 }, {
   src: logoAutoradio,
   name: "Авторадио",
-  freq: "105.3"
+  freq: "105.3",
+  description: "Музыка для тех, кто за рулём. Главные хиты, новости дорог и полезная информация для автомобилистов."
 }];
+
 interface ModernHeroSectionProps {
   onNavigate: (tab: string) => void;
 }
+
 const ModernHeroSection = ({
   onNavigate
 }: ModernHeroSectionProps) => {
   const isMobile = useIsMobile();
-  const orbitRadius = isMobile ? 100 : 200;
-  const logoSize = isMobile ? "w-14 h-14" : "w-24 h-24";
+  const [selectedStation, setSelectedStation] = useState<number | null>(null);
+  const orbitRadius = isMobile ? 110 : 220;
+  const logoSize = isMobile ? "w-16 h-16" : "w-28 h-28";
 
   return <section className="relative min-h-[85vh] flex items-center justify-center overflow-hidden">
       {/* Animated background */}
@@ -147,7 +158,7 @@ const ModernHeroSection = ({
             <FloatingRadio3D className="mb-12 scale-110" />
             
             {/* Orbiting logos - larger and more prominent */}
-            <div className="relative h-72 mx-auto w-full max-w-lg">
+            <div className="relative h-80 mx-auto w-full max-w-lg">
               {logos.map((logo, i) => {
               const angle = (i * 60 - 90) * (Math.PI / 180);
               const x = Math.cos(angle) * orbitRadius;
@@ -164,11 +175,11 @@ const ModernHeroSection = ({
                 duration: 0.5,
                 delay: 0.8 + i * 0.1
               }} whileHover={{
-                scale: 1.3,
+                scale: 1.2,
                 zIndex: 10
               }}>
-                    <div className="relative group cursor-pointer">
-                      <motion.img src={logo.src} alt={logo.name} className={`${logoSize} rounded-2xl bg-white p-1.5 shadow-xl object-contain border-2 border-white/50`} animate={{
+                    <div className="relative group cursor-pointer" onClick={() => setSelectedStation(selectedStation === i ? null : i)}>
+                      <motion.img src={logo.src} alt={logo.name} className={`${logoSize} rounded-2xl bg-white p-2 shadow-xl object-contain border-2 border-white/50`} animate={{
                     y: [0, -8, 0]
                   }} transition={{
                     duration: 2,
@@ -176,15 +187,42 @@ const ModernHeroSection = ({
                     repeat: Infinity,
                     ease: "easeInOut"
                   }} />
-                      {/* Tooltip on hover */}
-                      <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap">
-                        <div className="glass-card px-3 py-1.5 rounded-lg text-xs font-medium">
-                          {logo.name} <span className="text-primary">{logo.freq} FM</span>
-                        </div>
-                      </div>
                     </div>
                   </motion.div>;
             })}
+
+              {/* Station description popup */}
+              <AnimatePresence>
+                {selectedStation !== null && (
+                  <motion.div 
+                    className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20 w-72 md:w-80"
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.8 }}
+                  >
+                    <div className="glass-card p-4 rounded-2xl shadow-2xl border border-primary/20">
+                      <button 
+                        onClick={() => setSelectedStation(null)}
+                        className="absolute top-2 right-2 p-1 rounded-full hover:bg-secondary transition-colors"
+                      >
+                        <X className="w-4 h-4 text-muted-foreground" />
+                      </button>
+                      <div className="flex items-center gap-3 mb-2">
+                        <img 
+                          src={logos[selectedStation].src} 
+                          alt={logos[selectedStation].name}
+                          className="w-12 h-12 rounded-xl bg-white p-1 object-contain"
+                        />
+                        <div>
+                          <h3 className="font-semibold text-foreground">{logos[selectedStation].name}</h3>
+                          <p className="text-primary text-sm">{logos[selectedStation].freq} МГц</p>
+                        </div>
+                      </div>
+                      <p className="text-sm text-muted-foreground">{logos[selectedStation].description}</p>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
           </motion.div>
         </div>
