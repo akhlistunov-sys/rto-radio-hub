@@ -112,13 +112,16 @@ const MediaPlanner = () => {
           </p>
         </div>
 
-        {/* Input Card */}
-        <div className="glass-card p-4 md:p-6 space-y-4">
+        {/* Enhanced Input Card - Gemini-style */}
+        <div className="relative glass-card p-4 md:p-6 space-y-4 border-2 border-primary/20 hover:border-primary/40 transition-colors shadow-lg shadow-primary/5">
+          <div className="absolute -top-3 left-4 px-3 py-0.5 bg-primary text-primary-foreground text-xs font-medium rounded-full">
+            ✨ AI помощник
+          </div>
           <Textarea
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Например: У меня открывается новый магазин стройматериалов в Ялуторовске. Целевая аудитория - мужчины 30-50 лет."
-            className="min-h-[100px] resize-none border-0 bg-transparent text-sm md:text-base focus-visible:ring-0 placeholder:text-muted-foreground/50"
+            placeholder="Опишите ваш бизнес, целевую аудиторию и задачи рекламной кампании..."
+            className="min-h-[120px] resize-none border-0 bg-transparent text-sm md:text-base focus-visible:ring-0 placeholder:text-muted-foreground/60"
           />
           
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pt-2 border-t border-border/50">
@@ -323,10 +326,6 @@ const MediaPlanner = () => {
                       <Button variant="outline" size="sm" onClick={handleExportExcel}>
                         <Download className="w-4 h-4 mr-2" />
                         Скачать Excel
-                      </Button>
-                      <Button variant="outline" size="sm" onClick={handleExportJSON}>
-                        <Download className="w-4 h-4 mr-2" />
-                        Скачать JSON
                       </Button>
                     </div>
                   </div>
