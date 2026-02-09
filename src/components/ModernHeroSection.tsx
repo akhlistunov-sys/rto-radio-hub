@@ -60,26 +60,25 @@ const ModernHeroSection = ({
   const logoSize = isMobile ? "w-16 h-16" : "w-28 h-28";
 
   return <section className="relative min-h-[85vh] flex items-center justify-center overflow-hidden">
-      {/* Animated background */}
+      {/* Static gradient background - no cursor-tracking animations */}
       <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-primary/5" />
       
-      {/* Radio Wave Animation - fills the hero section */}
-      <RadioWaveAnimation className="opacity-40" />
+      {/* Radio Wave Animation - reduced opacity for less visual noise */}
+      <RadioWaveAnimation className="opacity-30" />
       
-      {/* Grid pattern */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,hsl(var(--border)/0.3)_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--border)/0.3)_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_110%)]" />
+      {/* Simplified grid pattern - removed mask for better MacBook compatibility */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,hsl(var(--border)/0.2)_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--border)/0.2)_1px,transparent_1px)] bg-[size:4rem_4rem]" />
 
-      {/* Floating particles */}
-      {[...Array(20)].map((_, i) => <motion.div key={i} className="absolute w-2 h-2 rounded-full bg-primary/30" style={{
-      left: `${Math.random() * 100}%`,
-      top: `${Math.random() * 100}%`
+      {/* Simplified floating particles - reduced count for performance */}
+      {[...Array(8)].map((_, i) => <motion.div key={i} className="absolute w-2 h-2 rounded-full bg-primary/20" style={{
+      left: `${15 + i * 10}%`,
+      top: `${20 + (i % 3) * 25}%`
     }} animate={{
-      y: [0, -30, 0],
-      opacity: [0.3, 0.8, 0.3],
-      scale: [1, 1.5, 1]
+      y: [0, -20, 0],
+      opacity: [0.2, 0.5, 0.2]
     }} transition={{
-      duration: 3 + Math.random() * 2,
-      delay: Math.random() * 2,
+      duration: 4 + i * 0.5,
+      delay: i * 0.3,
       repeat: Infinity,
       ease: "easeInOut"
     }} />)}
@@ -97,21 +96,31 @@ const ModernHeroSection = ({
           }} transition={{
             duration: 0.8
           }}>
-              <h1 className="text-4xl md:text-6xl font-bold text-foreground leading-tight">
-                Ваш голос на
+              <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-foreground leading-tight">
+                Платформа радиомаркетинга
                 <span className="block text-transparent bg-clip-text bg-gradient-to-r from-primary to-love-radio">
-                  радиоволнах
+                  для бизнеса
                 </span>
               </h1>
             </motion.div>
 
-            <motion.p className="text-lg text-muted-foreground max-w-md" initial={{
+            <motion.div className="space-y-3 max-w-lg" initial={{
             opacity: 0
           }} animate={{
             opacity: 1
           }} transition={{
             delay: 0.3
-          }}>6 радиостанций, 15 000+ слушателей ежедневно. Размещаем рекламу в Ялуторовске и Заводоуковске.</motion.p>
+          }}>
+              <p className="text-base md:text-lg text-muted-foreground">
+                Инструмент для планирования эффективного охвата в Ялуторовске и Заводоуковске
+              </p>
+              <p className="text-sm text-muted-foreground">
+                <span className="text-primary font-medium">РТО — это 6 федеральных станций в одном окне.</span> Мы объединяем города в единую рекламную сеть и даём бизнесу прозрачные инструменты планирования.
+              </p>
+              <p className="text-sm text-muted-foreground italic">
+                Мы превращаем радиоэфир в измеримый маркетинговый канал.
+              </p>
+            </motion.div>
 
             <motion.div className="flex flex-wrap gap-4" initial={{
             opacity: 0,
@@ -127,8 +136,8 @@ const ModernHeroSection = ({
                 Магия ИИ
                 <ArrowRight className="w-4 h-4" />
               </Button>
-              <Button size="lg" variant="outline" className="h-14 px-8" onClick={() => onNavigate("about")}>
-                Узнать больше
+              <Button size="lg" variant="outline" className="h-14 px-8" onClick={() => onNavigate("calculator")}>
+                Заказать рекламу
               </Button>
             </motion.div>
 

@@ -22,11 +22,12 @@ const systemPrompt = `Ты - эксперт по радиорекламе в а�
 
 ВАЖНЫЕ ПРАВИЛА:
 1. Рекомендуй от 4 до 6 радиостанций для максимального охвата
-2. Рекомендуемая длительность кампании: 20-30 дней
+2. Рекомендуемая длительность кампании: РОВНО 30 дней
 3. Ролик (производство) — В ПОДАРОК, не включай в стоимость
-4. Хронометраж ролика: 7-30 секунд
+4. Хронометраж ролика: 20-25 секунд (оптимально 20 сек)
 
 ФОРМУЛЫ РАСЧЁТА:
+- campaign_days = 30 (всегда рекомендуем 30 дней)
 - spots_per_day = stations_count × slots_count (слотов обычно 8-10)
 - total_spots = spots_per_day × campaign_days
 - Тарифы (руб/сек): 1-2 станции = 1.5, 3-4 станции = 1.3, 5 станций = 1.2, 6 станций = 1.1
@@ -62,15 +63,15 @@ const systemPrompt = `Ты - эксперт по радиорекламе в а�
   "calculation": {
     "stations_count": 4,
     "spots_per_day": 32,
-    "campaign_days": 25,
-    "total_spots": 800,
+    "campaign_days": 30,
+    "total_spots": 960,
     "estimated_reach": 35000,
-    "estimated_cost": 18200,
-    "cost_per_contact": 0.52
+    "estimated_cost": 18720,
+    "cost_per_contact": 0.53
   }
 }
 
-Рекомендуй 4-6 станций. Предоставь 3 варианта текстов роликов до 20 секунд. Расчёты по формулам выше.`;
+Рекомендуй 4-6 станций. campaign_days ВСЕГДА = 30. Предоставь 3 варианта текстов роликов до 20 секунд. Расчёты по формулам выше.`;
 
 serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -102,7 +103,7 @@ serve(async (req) => {
         model: "google/gemini-3-flash-preview",
         messages: [
           { role: "system", content: systemPrompt },
-          { role: "user", content: `Клиент описывает свой бизнес: "${query}". Составь рекомендации по размещению рекламы. Помни: ролик в подарок, рекомендуй 4+ станций и 20-30 дней кампании.` },
+          { role: "user", content: `Клиент описывает свой бизнес: "${query}". Составь рекомендации по размещению рекламы. ВАЖНО: ролик в подарок, рекомендуй 4+ станций, campaign_days ОБЯЗАТЕЛЬНО = 30 дней!` },
         ],
       }),
     });
@@ -164,11 +165,11 @@ serve(async (req) => {
         calculation: {
           stations_count: 4,
           spots_per_day: 32,
-          campaign_days: 25,
-          total_spots: 800,
+          campaign_days: 30,
+          total_spots: 960,
           estimated_reach: 28000,
-          estimated_cost: 16640,
-          cost_per_contact: 0.59
+          estimated_cost: 19968,
+          cost_per_contact: 0.71
         }
       };
     }
