@@ -8,42 +8,62 @@ import logoHumor from "@/assets/radio-humor.png";
 import logoLove from "@/assets/radio-love.png";
 import logoShanson from "@/assets/radio-shanson.jpg";
 import logoAutoradio from "@/assets/radio-autoradio.jpg";
-
-const features = [
-  {
-    icon: Target,
-    title: "Точное таргетирование",
-    description: "Подберём радиостанции под вашу целевую аудиторию с максимальной эффективностью"
-  },
-  {
-    icon: Users,
-    title: "Широкий охват",
-    description: "Более 15 000 слушателей ежедневно в Ялуторовске и Заводоуковске"
-  },
-  {
-    icon: Headphones,
-    title: "6 радиостанций",
-    description: "Разнообразие форматов для любой аудитории: от молодёжи до старшего поколения"
-  },
-  {
-    icon: Award,
-    title: "10+ лет опыта",
-    description: "Знаем местный рынок и помогаем бизнесу расти через радиорекламу"
-  },
-];
-
-const stations = [
-  { name: "Ретро FM", freq: "89.0 МГц", audience: "30–55 лет", desc: "Ностальгические хиты", logo: logoRetro },
-  { name: "Радио Дача", freq: "105.9 МГц", audience: "35–65 лет", desc: "Семейный формат", logo: logoDacha },
-  { name: "Юмор FM", freq: "93.9 МГц", audience: "25–45 лет", desc: "Позитив и смех", logo: logoHumor },
-  { name: "Love Radio", freq: "88.1 / 92.2 МГц", audience: "18–35 лет", desc: "Романтика и драйв", logo: logoLove },
-  { name: "Радио Шансон", freq: "101.0 МГц", audience: "30–60 лет", desc: "Честные истории", logo: logoShanson },
-  { name: "Авторадио", freq: "105.3 МГц", audience: "25–50 лет", desc: "Для автомобилистов", logo: logoAutoradio },
-];
-
+const features = [{
+  icon: Target,
+  title: "Точное таргетирование",
+  description: "Подберём радиостанции под вашу целевую аудиторию с максимальной эффективностью"
+}, {
+  icon: Users,
+  title: "Широкий охват",
+  description: "Более 15 000 слушателей ежедневно в Ялуторовске и Заводоуковске"
+}, {
+  icon: Headphones,
+  title: "6 радиостанций",
+  description: "Разнообразие форматов для любой аудитории: от молодёжи до старшего поколения"
+}, {
+  icon: Award,
+  title: "10+ лет опыта",
+  description: "Знаем местный рынок и помогаем бизнесу расти через радиорекламу"
+}];
+const stations = [{
+  name: "Ретро FM",
+  freq: "89.0 МГц",
+  audience: "30–55 лет",
+  desc: "Ностальгические хиты",
+  logo: logoRetro
+}, {
+  name: "Радио Дача",
+  freq: "105.9 МГц",
+  audience: "35–65 лет",
+  desc: "Семейный формат",
+  logo: logoDacha
+}, {
+  name: "Юмор FM",
+  freq: "93.9 МГц",
+  audience: "25–45 лет",
+  desc: "Позитив и смех",
+  logo: logoHumor
+}, {
+  name: "Love Radio",
+  freq: "88.1 / 92.2 МГц",
+  audience: "18–35 лет",
+  desc: "Романтика и драйв",
+  logo: logoLove
+}, {
+  name: "Радио Шансон",
+  freq: "101.0 МГц",
+  audience: "30–60 лет",
+  desc: "Честные истории",
+  logo: logoShanson
+}, {
+  name: "Авторадио",
+  freq: "105.3 МГц",
+  audience: "25–50 лет",
+  desc: "Для автомобилистов",
+  logo: logoAutoradio
+}];
 const About = () => {
-  return (
-    <section className="flex-1 p-6 overflow-y-auto animate-fade-in">
+  return <section className="flex-1 p-6 overflow-y-auto animate-fade-in">
       <div className="max-w-5xl mx-auto space-y-10">
         {/* Hero */}
         <div className="text-center space-y-4 py-8">
@@ -52,42 +72,30 @@ const About = () => {
             <span className="block text-primary">Радио Тюменской области</span>
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Ваш надёжный партнёр в радиорекламе. Помогаем бизнесу Ялуторовска и Заводоуковска 
-            находить клиентов через эффективные рекламные кампании на радио.
+            Ваш надёжный партнёр в радиорекламе. Помогаем бизнесу находить клиентов через эффективные рекламные кампании на радио.
           </p>
         </div>
 
         {/* Features */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {features.map((feature, index) => (
-            <div 
-              key={feature.title} 
-              className="glass-card p-6 animate-slide-up"
-              style={{ animationDelay: `${index * 100}ms` }}
-            >
+          {features.map((feature, index) => <div key={feature.title} className="glass-card p-6 animate-slide-up" style={{
+          animationDelay: `${index * 100}ms`
+        }}>
               <feature.icon className="w-10 h-10 text-primary mb-4" />
               <h3 className="font-semibold text-foreground mb-2">{feature.title}</h3>
               <p className="text-sm text-muted-foreground">{feature.description}</p>
-            </div>
-          ))}
+            </div>)}
         </div>
 
         {/* Stations Grid */}
         <div className="glass-card p-6">
           <h2 className="text-xl font-semibold text-foreground mb-6">Наши радиостанции</h2>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {stations.map((station, index) => (
-              <div 
-                key={station.name}
-                className="p-4 rounded-xl bg-secondary/50 hover:bg-secondary transition-colors animate-scale-in"
-                style={{ animationDelay: `${index * 50}ms` }}
-              >
+            {stations.map((station, index) => <div key={station.name} className="p-4 rounded-xl bg-secondary/50 hover:bg-secondary transition-colors animate-scale-in" style={{
+            animationDelay: `${index * 50}ms`
+          }}>
                 <div className="flex items-start gap-3">
-                  <img 
-                    src={station.logo} 
-                    alt={station.name}
-                    className="w-14 h-14 object-contain rounded-lg bg-white"
-                  />
+                  <img src={station.logo} alt={station.name} className="w-14 h-14 object-contain rounded-lg bg-white" />
                   <div>
                     <h4 className="font-semibold text-foreground">{station.name}</h4>
                     <p className="text-sm text-primary">{station.freq}</p>
@@ -95,8 +103,7 @@ const About = () => {
                     <p className="text-xs text-muted-foreground">Аудитория: {station.audience}</p>
                   </div>
                 </div>
-              </div>
-            ))}
+              </div>)}
           </div>
         </div>
 
@@ -110,32 +117,21 @@ const About = () => {
               </p>
               
               <div className="space-y-4">
-                <a 
-                  href="tel:+73453550151"
-                  className="flex items-center gap-3 text-foreground hover:text-primary transition-colors"
-                >
+                <a href="tel:+73453550151" className="flex items-center gap-3 text-foreground hover:text-primary transition-colors">
                   <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
                     <Phone className="w-5 h-5 text-primary" />
                   </div>
                   <span className="font-medium">8 (34535) 5-01-51</span>
                 </a>
                 
-                <a 
-                  href="mailto:yaradio@bk.ru"
-                  className="flex items-center gap-3 text-foreground hover:text-primary transition-colors"
-                >
+                <a href="mailto:yaradio@bk.ru" className="flex items-center gap-3 text-foreground hover:text-primary transition-colors">
                   <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
                     <Mail className="w-5 h-5 text-primary" />
                   </div>
                   <span className="font-medium">yaradio@bk.ru</span>
                 </a>
                 
-                <a 
-                  href="https://t.me/YaRadioBot"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-3 text-foreground hover:text-primary transition-colors"
-                >
+                <a href="https://t.me/YaRadioBot" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-foreground hover:text-primary transition-colors">
                   <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
                     <Send className="w-5 h-5 text-primary" />
                   </div>
@@ -156,8 +152,6 @@ const About = () => {
           </div>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default About;
