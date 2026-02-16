@@ -1,25 +1,18 @@
 import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Sparkles, Send, Radio, Lightbulb, FileText, Calculator, Download, Mail, Loader2, CheckCircle2 } from "lucide-react";
+import { Sparkles, Radio, Lightbulb, FileText, Calculator, Download, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { MediaPlanResponse, MediaPlanJSON } from "@/lib/mediaplan-types";
-import { generateMediaPlanJSON, exportToExcel, downloadJSON } from "@/lib/export-utils";
+import { generateMediaPlanJSON, exportToExcel } from "@/lib/export-utils";
 
 const MediaPlanner = () => {
   const [query, setQuery] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [aiResponse, setAiResponse] = useState<MediaPlanResponse | null>(null);
   const [mediaPlanJSON, setMediaPlanJSON] = useState<MediaPlanJSON | null>(null);
-  const [showEmailForm, setShowEmailForm] = useState(false);
-  const [clientEmail, setClientEmail] = useState("");
-  const [clientName, setClientName] = useState("");
-  const [clientPhone, setClientPhone] = useState("");
-  const [isSendingEmail, setIsSendingEmail] = useState(false);
-  const [emailSent, setEmailSent] = useState(false);
   const resultRef = useRef<HTMLDivElement>(null);
 
   const handleSubmit = async () => {
@@ -28,8 +21,6 @@ const MediaPlanner = () => {
     setIsLoading(true);
     setAiResponse(null);
     setMediaPlanJSON(null);
-    setShowEmailForm(false);
-    setEmailSent(false);
 
     try {
       const { data, error } = await supabase.functions.invoke("media-planner", {
@@ -53,48 +44,27 @@ const MediaPlanner = () => {
     }
   };
 
-  const handleExportExcel = () => {
-    if (!mediaPlanJSON) return;
-    exportToExcel(mediaPlanJSON);
+  const handleExportExcel = async () => {
+    if (!mediaPlanJSON || !aiResponse) return;
+    const planId = exportToExcel(mediaPlanJSON);
     toast.success("Excel файл скачан!");
-  };
-
-  const handleExportJSON = () => {
-    if (!mediaPlanJSON) return;
-    downloadJSON(mediaPlanJSON);
-    toast.success("JSON файл скачан!");
-  };
-
-  const handleSendEmail = async () => {
-    if (!clientEmail || !clientName || !mediaPlanJSON || !aiResponse) {
-      toast.error("Заполните имя и email");
-      return;
-    }
-
-    setIsSendingEmail(true);
-
+    
+    // Send admin notification silently
     try {
-      const { data, error } = await supabase.functions.invoke("send-media-plan", {
+      await supabase.functions.invoke("send-media-plan", {
         body: {
-          clientEmail,
-          clientName,
-          clientPhone,
+          type: "admin_notification",
+          planId,
           mediaPlan: aiResponse,
           originalQuery: query,
         },
       });
-
-      if (error) throw error;
-
-      setEmailSent(true);
-      toast.success("Медиаплан отправлен на вашу почту!");
-    } catch (error) {
-      console.error("Email error:", error);
-      toast.error("Не удалось отправить письмо. Попробуйте скачать файл.");
-    } finally {
-      setIsSendingEmail(false);
+    } catch (e) {
+      console.error("Admin notification failed:", e);
     }
   };
+
+  const dailyReach = aiResponse ? Math.round(aiResponse.calculation.estimated_reach / aiResponse.calculation.campaign_days) : 0;
 
   return (
     <section className="flex-1 flex flex-col items-center justify-start p-4 md:p-8 animate-fade-in min-h-screen">
@@ -274,18 +244,35 @@ const MediaPlanner = () => {
                     <p className="text-xs text-muted-foreground">станций</p>
                   </div>
                   <div className="p-3 rounded-lg bg-secondary/50 text-center">
-                    <p className="text-2xl font-bold text-primary">{aiResponse.calculation.total_spots}</p>
-                    <p className="text-xs text-muted-foreground">выходов</p>
+                    <p className="text-2xl font-bold text-primary">{aiResponse.calculation.spots_per_day}</p>
+                    <p className="text-xs text-muted-foreground">выходов/день</p>
                   </div>
                   <div className="p-3 rounded-lg bg-secondary/50 text-center">
-                    <p className="text-2xl font-bold text-primary">~{(aiResponse.calculation.estimated_reach / 1000).toFixed(0)}K</p>
-                    <p className="text-xs text-muted-foreground">охват</p>
+                    <p className="text-2xl font-bold text-primary">~{dailyReach.toLocaleString()}</p>
+                    <p className="text-xs text-muted-foreground">охват/день</p>
                   </div>
                   <div className="p-3 rounded-lg bg-secondary/50 text-center">
                     <p className="text-2xl font-bold text-primary">{aiResponse.calculation.cost_per_contact.toFixed(2)}₽</p>
                     <p className="text-xs text-muted-foreground">за контакт</p>
                   </div>
                 </div>
+
+                {/* Detailed metrics */}
+                <div className="mt-3 grid grid-cols-1 sm:grid-cols-3 gap-2 text-sm">
+                  <div className="p-2 rounded-lg bg-secondary/30 text-center">
+                    <p className="text-xs text-muted-foreground">Всего выходов</p>
+                    <p className="font-bold text-foreground">{aiResponse.calculation.total_spots}</p>
+                  </div>
+                  <div className="p-2 rounded-lg bg-secondary/30 text-center">
+                    <p className="text-xs text-muted-foreground">Контактов за период</p>
+                    <p className="font-bold text-foreground">~{aiResponse.calculation.estimated_reach.toLocaleString()}</p>
+                  </div>
+                  <div className="p-2 rounded-lg bg-secondary/30 text-center">
+                    <p className="text-xs text-muted-foreground">Период</p>
+                    <p className="font-bold text-foreground">{aiResponse.calculation.campaign_days} дней</p>
+                  </div>
+                </div>
+
                 <div className="mt-4 p-4 rounded-xl bg-gradient-to-r from-primary/20 to-primary/5 border border-primary/20">
                   <div className="flex items-center justify-between">
                     <div>
@@ -295,111 +282,27 @@ const MediaPlanner = () => {
                       </p>
                     </div>
                     <div className="text-right">
-                      <p className="text-xs text-muted-foreground">{aiResponse.calculation.campaign_days} дней</p>
-                      <p className="text-xs text-muted-foreground">{aiResponse.calculation.spots_per_day} выходов/день</p>
+                      <p className="text-xs text-muted-foreground">🎁 Ролик в подарок</p>
                     </div>
                   </div>
                 </div>
               </div>
 
-              {/* CTA Button */}
+              {/* Download Excel Button */}
               <motion.div
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.3 }}
-                className="glass-card p-4 md:p-6"
+                className="text-center py-4"
               >
-                {!showEmailForm ? (
-                  <div className="text-center space-y-4">
-                    <Button
-                      size="lg"
-                      className="gradient-primary gap-2 rounded-full px-8 py-6 text-lg font-semibold hover:opacity-90 transition-all hover:scale-105"
-                      onClick={() => setShowEmailForm(true)}
-                    >
-                      <CheckCircle2 className="w-5 h-5" />
-                      Ваш медиаплан готов!
-                    </Button>
-                    <p className="text-sm text-muted-foreground">
-                      Получите медиаплан на почту или скачайте в Excel
-                    </p>
-                    <div className="flex flex-wrap justify-center gap-2">
-                      <Button variant="outline" size="sm" onClick={handleExportExcel}>
-                        <Download className="w-4 h-4 mr-2" />
-                        Скачать Excel
-                      </Button>
-                    </div>
-                  </div>
-                ) : !emailSent ? (
-                  <div className="space-y-4">
-                    <h3 className="text-lg font-semibold text-center">Получить медиаплан на почту</h3>
-                    <div className="grid md:grid-cols-2 gap-3">
-                      <Input
-                        placeholder="Ваше имя *"
-                        value={clientName}
-                        onChange={(e) => setClientName(e.target.value)}
-                      />
-                      <Input
-                        type="email"
-                        placeholder="Email *"
-                        value={clientEmail}
-                        onChange={(e) => setClientEmail(e.target.value)}
-                      />
-                    </div>
-                    <Input
-                      type="tel"
-                      placeholder="Телефон (необязательно)"
-                      value={clientPhone}
-                      onChange={(e) => setClientPhone(e.target.value)}
-                    />
-                    <div className="flex flex-col sm:flex-row gap-2">
-                      <Button
-                        className="flex-1 gradient-primary gap-2"
-                        disabled={!clientEmail || !clientName || isSendingEmail}
-                        onClick={handleSendEmail}
-                      >
-                        {isSendingEmail ? (
-                          <>
-                            <Loader2 className="w-4 h-4 animate-spin" />
-                            Отправляем...
-                          </>
-                        ) : (
-                          <>
-                            <Mail className="w-4 h-4" />
-                            Отправить на почту
-                          </>
-                        )}
-                      </Button>
-                      <Button variant="outline" onClick={handleExportExcel}>
-                        <Download className="w-4 h-4 mr-2" />
-                        Excel
-                      </Button>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="text-center space-y-4">
-                    <div className="w-16 h-16 mx-auto rounded-full bg-green-500/10 flex items-center justify-center">
-                      <CheckCircle2 className="w-8 h-8 text-green-500" />
-                    </div>
-                    <h3 className="text-lg font-semibold">Медиаплан отправлен!</h3>
-                    <p className="text-sm text-muted-foreground">
-                      Проверьте почту {clientEmail}. Наш менеджер свяжется с вами в ближайшее время.
-                    </p>
-                    <div className="flex flex-wrap justify-center gap-2">
-                      <Button variant="outline" size="sm" onClick={handleExportExcel}>
-                        <Download className="w-4 h-4 mr-2" />
-                        Скачать Excel
-                      </Button>
-                      <Button variant="outline" size="sm" onClick={() => {
-                        setAiResponse(null);
-                        setQuery("");
-                        setShowEmailForm(false);
-                        setEmailSent(false);
-                      }}>
-                        Создать новый план
-                      </Button>
-                    </div>
-                  </div>
-                )}
+                <Button
+                  size="lg"
+                  className="gradient-primary gap-2 rounded-full px-8 py-6 text-lg font-semibold hover:opacity-90 transition-all hover:scale-105"
+                  onClick={handleExportExcel}
+                >
+                  <Download className="w-5 h-5" />
+                  Скачать Excel
+                </Button>
               </motion.div>
             </motion.div>
           )}

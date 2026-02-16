@@ -46,11 +46,11 @@ const stationData = [{
 }];
 const keyStats = [{
   value: "66 000+",
-  label: "Суммарная аудитория",
+  label: "Количество жителей",
   icon: Users
 }, {
-  value: "~20 000",
-  label: "Слушателей в день",
+  value: "~15 000",
+  label: "Слушателей в сутки",
   icon: Radio
 }, {
   value: "3-5 ч",

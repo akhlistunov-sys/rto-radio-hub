@@ -22,6 +22,7 @@ export interface MediaPlanScript {
 
 export interface MediaPlanCalculation {
   stations_count: number;
+  slots_count?: number;
   spots_per_day: number;
   campaign_days: number;
   total_spots: number;
