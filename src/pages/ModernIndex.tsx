@@ -194,7 +194,7 @@ const ModernIndex = () => {
       {/* Footer */}
       <footer className="py-8 border-t border-border/50 mt-16">
         <div className="container mx-auto px-6">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-6">
             <img src={logoRTO} alt="РТО" className="h-10 object-contain" />
             
             <div className="flex items-center gap-6 text-sm text-muted-foreground">
@@ -211,8 +211,27 @@ const ModernIndex = () => {
                 Telegram
               </a>
             </div>
+          </div>
 
-            <p className="text-xs text-muted-foreground">© 2026 РТО. Ялуторовск • Заводоуковск</p>
+          <div className="border-t border-border/30 pt-4 text-center space-y-2">
+            <p className="text-xs text-muted-foreground">
+              ООО «Радио Тюменской области» (ООО «РТО»)
+            </p>
+            <p className="text-xs text-muted-foreground">
+              ИНН 7203478564 | ОГРН 1197232011514
+            </p>
+            <p className="text-xs text-muted-foreground">
+              Юридический адрес: 625000, г. Тюмень, ул. Мельникайте, д. 129/6А
+            </p>
+            <p className="text-xs text-muted-foreground">
+              Зарегистрированы в Реестре операторов ПДн Роскомнадзора № 72-20-005363
+            </p>
+            <p className="text-xs text-muted-foreground">
+              © 2026 |{" "}
+              <a href="/privacy" className="text-primary hover:underline">
+                Политика конфиденциальности
+              </a>
+            </p>
           </div>
         </div>
       </footer>
