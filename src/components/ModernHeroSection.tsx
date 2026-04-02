@@ -97,7 +97,7 @@ const ModernHeroSection = ({
             duration: 0.8
           }}>
               <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-foreground leading-tight">
-                Платформа радиомаркетинга
+                Платформа радио активного маркетинга
                 <span className="block text-transparent bg-clip-text bg-gradient-to-r from-primary to-love-radio">
                   для бизнеса
                 </span>
