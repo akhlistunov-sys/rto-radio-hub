@@ -69,19 +69,9 @@ const FloatingRadio3D = ({ className = "" }: FloatingRadio3DProps) => {
           {/* Speaker grille */}
           <div className="absolute bottom-3 right-3 w-16 h-16 rounded-full bg-slate-900 grid grid-cols-4 grid-rows-4 gap-0.5 p-2">
             {[...Array(16)].map((_, i) => (
-              <motion.div
+              <div
                 key={i}
                 className="rounded-full bg-slate-700"
-                animate={{ 
-                  scale: [1, 1.2, 1],
-                  backgroundColor: ["rgb(51, 65, 85)", "rgb(100, 116, 139)", "rgb(51, 65, 85)"]
-                }}
-                transition={{
-                  duration: 0.5,
-                  delay: i * 0.05,
-                  repeat: Infinity,
-                  repeatDelay: 2
-                }}
               />
             ))}
           </div>

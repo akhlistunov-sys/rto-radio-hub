@@ -167,18 +167,11 @@ const ModernHeroSection = ({
                 duration: 0.5,
                 delay: 0.8 + i * 0.1
               }} whileHover={{
-                scale: 1.2,
+                scale: 1.15,
                 zIndex: 10
               }}>
                     <div className="relative group cursor-pointer" onClick={() => setSelectedStation(selectedStation === i ? null : i)}>
-                      <motion.img src={logo.src} alt={logo.name} className={`${logoSize} rounded-2xl bg-white p-2 shadow-xl object-contain border-2 border-white/50`} animate={{
-                    y: [0, -8, 0]
-                  }} transition={{
-                    duration: 2,
-                    delay: i * 0.2,
-                    repeat: Infinity,
-                    ease: "easeInOut"
-                  }} />
+                      <img src={logo.src} alt={logo.name} className={`${logoSize} rounded-2xl bg-white p-2 shadow-xl object-contain border-2 border-white/50`} />
                     </div>
                   </motion.div>;
             })}
