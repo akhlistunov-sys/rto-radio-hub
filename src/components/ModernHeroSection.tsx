@@ -60,28 +60,11 @@ const ModernHeroSection = ({
   const logoSize = isMobile ? "w-16 h-16" : "w-28 h-28";
 
   return <section className="relative min-h-[85vh] flex items-center justify-center overflow-hidden">
-      {/* Static gradient background - no cursor-tracking animations */}
+      {/* Static gradient background */}
       <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-primary/5" />
       
-      {/* Radio Wave Animation - reduced opacity for less visual noise */}
-      <RadioWaveAnimation className="opacity-30" />
-      
-      {/* Simplified grid pattern - removed mask for better MacBook compatibility */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,hsl(var(--border)/0.2)_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--border)/0.2)_1px,transparent_1px)] bg-[size:4rem_4rem]" />
-
-      {/* Simplified floating particles - reduced count for performance */}
-      {[...Array(8)].map((_, i) => <motion.div key={i} className="absolute w-2 h-2 rounded-full bg-primary/20" style={{
-      left: `${15 + i * 10}%`,
-      top: `${20 + (i % 3) * 25}%`
-    }} animate={{
-      y: [0, -20, 0],
-      opacity: [0.2, 0.5, 0.2]
-    }} transition={{
-      duration: 4 + i * 0.5,
-      delay: i * 0.3,
-      repeat: Infinity,
-      ease: "easeInOut"
-    }} />)}
+      {/* Subtle grid pattern */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,hsl(var(--border)/0.1)_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--border)/0.1)_1px,transparent_1px)] bg-[size:4rem_4rem]" />
 
       <div className="container mx-auto px-6 relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
