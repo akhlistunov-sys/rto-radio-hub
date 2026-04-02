@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import FloatingRadio3D from "./FloatingRadio3D";
 import SoundWaveVisualizer from "./SoundWaveVisualizer";
-import RadioWaveAnimation from "./RadioWaveAnimation";
+
 
 // Import logos
 import logoRetro from "@/assets/radio-retro.png";
