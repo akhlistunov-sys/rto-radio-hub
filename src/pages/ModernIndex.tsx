@@ -192,12 +192,12 @@ const ModernIndex = () => {
         </motion.div>}
 
       {/* Footer */}
-      <footer className="py-8 border-t border-border/50 mt-16 w-full">
-        <div className="w-full px-6">
+      <footer className="py-8 border-t border-border/50 mt-16">
+        <div className="max-w-7xl mx-auto px-6">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-6">
             <img src={logoRTO} alt="РТО" className="h-10 object-contain" />
             
-            <div className="flex items-center gap-6 text-sm text-muted-foreground">
+            <div className="flex flex-wrap items-center justify-center gap-4 md:gap-6 text-sm text-muted-foreground">
               <a href="tel:+73453550151" className="hover:text-primary transition-colors flex items-center gap-2">
                 <Phone className="w-4 h-4" />
                 8 (34535) 5-01-51
@@ -213,20 +213,10 @@ const ModernIndex = () => {
             </div>
           </div>
 
-          <div className="border-t border-border/30 pt-4 text-center space-y-2">
-            <p className="text-xs text-muted-foreground">
-              ООО «Радио Тюменской области» (ООО «РТО»)
-            </p>
-            <p className="text-xs text-muted-foreground">
-              ИНН 7203478564 | ОГРН 1197232011514
-            </p>
-            <p className="text-xs text-muted-foreground">
-              Юридический адрес: 625000, г. Тюмень, ул. Мельникайте, д. 129/6А
-            </p>
-            <p className="text-xs text-muted-foreground">
-              Зарегистрированы в Реестре операторов ПДн Роскомнадзора № 72-20-005363
-            </p>
-            <p className="text-xs text-muted-foreground">
+          <div className="border-t border-border/30 pt-4 text-center text-xs text-muted-foreground space-y-1">
+            <p>ООО «Радио Тюменской области» (ООО «РТО») · ИНН 7203478564 · ОГРН 1197232011514</p>
+            <p>Юридический адрес: 625000, г. Тюмень, ул. Мельникайте, д. 129/6А · Реестр ПДн Роскомнадзора № 72-20-005363</p>
+            <p>
               © 2026 |{" "}
               <a href="/privacy" className="text-primary hover:underline">
                 Политика конфиденциальности
