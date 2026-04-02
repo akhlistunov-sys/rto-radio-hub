@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+// Simplified radio wave animation using CSS only to prevent MacBook flickering
 
 interface RadioWaveAnimationProps {
   className?: string;
