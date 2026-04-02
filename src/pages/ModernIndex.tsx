@@ -192,8 +192,8 @@ const ModernIndex = () => {
         </motion.div>}
 
       {/* Footer */}
-      <footer className="py-8 border-t border-border/50 mt-16">
-        <div className="container mx-auto px-6">
+      <footer className="py-8 border-t border-border/50 mt-16 w-full">
+        <div className="w-full px-6">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-6">
             <img src={logoRTO} alt="РТО" className="h-10 object-contain" />
             

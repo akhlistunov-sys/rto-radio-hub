@@ -69,19 +69,9 @@ const FloatingRadio3D = ({ className = "" }: FloatingRadio3DProps) => {
           {/* Speaker grille */}
           <div className="absolute bottom-3 right-3 w-16 h-16 rounded-full bg-slate-900 grid grid-cols-4 grid-rows-4 gap-0.5 p-2">
             {[...Array(16)].map((_, i) => (
-              <motion.div
+              <div
                 key={i}
                 className="rounded-full bg-slate-700"
-                animate={{ 
-                  scale: [1, 1.2, 1],
-                  backgroundColor: ["rgb(51, 65, 85)", "rgb(100, 116, 139)", "rgb(51, 65, 85)"]
-                }}
-                transition={{
-                  duration: 0.5,
-                  delay: i * 0.05,
-                  repeat: Infinity,
-                  repeatDelay: 2
-                }}
               />
             ))}
           </div>
@@ -100,27 +90,19 @@ const FloatingRadio3D = ({ className = "" }: FloatingRadio3DProps) => {
         <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-transparent rounded-2xl blur-xl -z-10" />
       </motion.div>
 
-      {/* Sound waves */}
+      {/* Sound waves - CSS only for no flicker */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
         {[...Array(3)].map((_, i) => (
-          <motion.div
+          <div
             key={i}
-            className="absolute border-2 border-primary/30 rounded-full"
+            className="absolute border border-primary/20 rounded-full animate-pulse"
             style={{
               width: 200 + i * 50,
               height: 200 + i * 50,
               left: -(100 + i * 25),
               top: -(100 + i * 25),
-            }}
-            animate={{
-              scale: [1, 1.5, 1],
-              opacity: [0.3, 0, 0.3],
-            }}
-            transition={{
-              duration: 2,
-              delay: i * 0.3,
-              repeat: Infinity,
-              ease: "easeInOut"
+              animationDelay: `${i * 0.5}s`,
+              animationDuration: `${3 + i}s`,
             }}
           />
         ))}

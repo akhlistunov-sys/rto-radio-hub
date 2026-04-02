@@ -60,28 +60,11 @@ const ModernHeroSection = ({
   const logoSize = isMobile ? "w-16 h-16" : "w-28 h-28";
 
   return <section className="relative min-h-[85vh] flex items-center justify-center overflow-hidden">
-      {/* Static gradient background - no cursor-tracking animations */}
+      {/* Static gradient background */}
       <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-primary/5" />
       
-      {/* Radio Wave Animation - reduced opacity for less visual noise */}
-      <RadioWaveAnimation className="opacity-30" />
-      
-      {/* Simplified grid pattern - removed mask for better MacBook compatibility */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,hsl(var(--border)/0.2)_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--border)/0.2)_1px,transparent_1px)] bg-[size:4rem_4rem]" />
-
-      {/* Simplified floating particles - reduced count for performance */}
-      {[...Array(8)].map((_, i) => <motion.div key={i} className="absolute w-2 h-2 rounded-full bg-primary/20" style={{
-      left: `${15 + i * 10}%`,
-      top: `${20 + (i % 3) * 25}%`
-    }} animate={{
-      y: [0, -20, 0],
-      opacity: [0.2, 0.5, 0.2]
-    }} transition={{
-      duration: 4 + i * 0.5,
-      delay: i * 0.3,
-      repeat: Infinity,
-      ease: "easeInOut"
-    }} />)}
+      {/* Subtle grid pattern */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,hsl(var(--border)/0.1)_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--border)/0.1)_1px,transparent_1px)] bg-[size:4rem_4rem]" />
 
       <div className="container mx-auto px-6 relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
@@ -97,7 +80,7 @@ const ModernHeroSection = ({
             duration: 0.8
           }}>
               <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-foreground leading-tight">
-                Платформа радиомаркетинга
+                Платформа радио активного маркетинга
                 <span className="block text-transparent bg-clip-text bg-gradient-to-r from-primary to-love-radio">
                   для бизнеса
                 </span>
@@ -184,18 +167,11 @@ const ModernHeroSection = ({
                 duration: 0.5,
                 delay: 0.8 + i * 0.1
               }} whileHover={{
-                scale: 1.2,
+                scale: 1.15,
                 zIndex: 10
               }}>
                     <div className="relative group cursor-pointer" onClick={() => setSelectedStation(selectedStation === i ? null : i)}>
-                      <motion.img src={logo.src} alt={logo.name} className={`${logoSize} rounded-2xl bg-white p-2 shadow-xl object-contain border-2 border-white/50`} animate={{
-                    y: [0, -8, 0]
-                  }} transition={{
-                    duration: 2,
-                    delay: i * 0.2,
-                    repeat: Infinity,
-                    ease: "easeInOut"
-                  }} />
+                      <img src={logo.src} alt={logo.name} className={`${logoSize} rounded-2xl bg-white p-2 shadow-xl object-contain border-2 border-white/50`} />
                     </div>
                   </motion.div>;
             })}
