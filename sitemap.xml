@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  
+  <!-- ==================== ОСНОВНЫЕ СТРАНИЦЫ ==================== -->
+  
+  <!-- Главная -->
+  <url>
+    <loc>https://ya-radio.ru/</loc>
+    <lastmod>2026-04-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  
+  <!-- Медиапланер (AI помощник) -->
+  <url>
+    <loc>https://ya-radio.ru/mediaplanner/</loc>
+    <lastmod>2026-04-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  
+  <!-- Калькулятор рекламы -->
+  <url>
+    <loc>https://ya-radio.ru/calculator/</loc>
+    <lastmod>2026-04-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  
+  <!-- Статистика и охват -->
+  <url>
+    <loc>https://ya-radio.ru/statistics/</loc>
+    <lastmod>2026-04-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <!-- О нас -->
+  <url>
+    <loc>https://ya-radio.ru/about/</loc>
+    <lastmod>2026-04-13</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+  <!-- Контакты -->
+  <url>
+    <loc>https://ya-radio.ru/contacts/</loc>
+    <lastmod>2026-04-13</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <!-- ==================== РАДИОСТАНЦИИ (6 шт) ==================== -->
+  
+  <!-- Сводная страница радиостанций -->
+  <url>
+    <loc>https://ya-radio.ru/stations/</loc>
+    <lastmod>2026-04-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  
+  <!-- 1. Ретро FM -->
+  <url>
+    <loc>https://ya-radio.ru/stations/retro-fm/</loc>
+    <lastmod>2026-04-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <!-- 2. Радио Дача -->
+  <url>
+    <loc>https://ya-radio.ru/stations/radio-dacha/</loc>
+    <lastmod>2026-04-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <!-- 3. Юмор FM -->
+  <url>
+    <loc>https://ya-radio.ru/stations/yumor-fm/</loc>
+    <lastmod>2026-04-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <!-- 4. Love Radio -->
+  <url>
+    <loc>https://ya-radio.ru/stations/love-radio/</loc>
+    <lastmod>2026-04-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <!-- 5. Радио Шансон -->
+  <url>
+    <loc>https://ya-radio.ru/stations/radio-shanson/</loc>
+    <lastmod>2026-04-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <!-- 6. Авторадио -->
+  <url>
+    <loc>https://ya-radio.ru/stations/avtoradio/</loc>
+    <lastmod>2026-04-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ==================== ГОРОДА ВЕЩАНИЯ ==================== -->
+  
+  <!-- Ялуторовск -->
+  <url>
+    <loc>https://ya-radio.ru/cities/yalutorovsk/</loc>
+    <lastmod>2026-04-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+  <!-- Заводоуковск -->
+  <url>
+    <loc>https://ya-radio.ru/cities/zavodoukovsk/</loc>
+    <lastmod>2026-04-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+</urlset>
