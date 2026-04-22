@@ -1,0 +1,15 @@
+# Для всех поисковых роботов
+User-agent: *
+Allow: /
+
+# Запрещаем индексацию служебных или системных папок (если они есть)
+Disallow: /admin/
+Disallow: /cgi-bin/
+Disallow: /tmp/
+Disallow: /private/
+
+# Указываем путь к карте сайта
+Sitemap: https://ya-radio.ru/sitemap.xml
+
+# Хост сайта (рекомендуется для Яндекса)
+Host: https://ya-radio.ru
