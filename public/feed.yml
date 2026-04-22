@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE yml_catalog SYSTEM "shops.dtd">
+<yml_catalog date="2026-04-22 17:22">
+    <shop>
+        <name>РТО (Радио Тюменской области)</name>
+        <company>ООО «Радио Тюменской области» (ООО «РТО»)</company>
+        <url>https://ya-radio.ru/</url>
+        <platform>Custom</platform>
+        <version>1.0</version>
+        <currencies>
+            <currency id="RUB" rate="1"/>
+        </currencies>
+        <categories>
+            <category id="1">Радиореклама</category>
+        </categories>
+        <delivery-options>
+            <option cost="0" days="0"/>
+        </delivery-options>
+        <offers>
+            <offer id="1" type="service" available="true">
+                <url>https://ya-radio.ru/#services</url>
+                <price>11000</price>
+                <currencyId>RUB</currencyId>
+                <categoryId>1</categoryId>
+                <picture>https://ya-radio.ru/og-image.jpg</picture>
+                <name>Размещение рекламы на радио</name>
+                <description>Комплексное размещение рекламы на 6 федеральных радиостанциях в Ялуторовске и Заводоуковске. Инструменты для точного планирования аудитории и прозрачного расчёта бюджета.</description>
+                <delivery-options>
+                    <option cost="0" days="0"/>
+                </delivery-options>
+            </offer>
+        </offers>
+    </shop>
+</yml_catalog>
