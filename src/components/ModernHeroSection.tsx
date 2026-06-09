@@ -69,9 +69,9 @@ const ModernHeroSection = ({
           <div className="space-y-6">
             <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6 }}>
               <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-foreground leading-tight">
-                Платформа радио активного маркетинга
+                Радио активный маркетинг
                 <span className="block text-transparent bg-clip-text bg-gradient-to-r from-primary to-love-radio">
-                  для бизнеса
+                  Более 300 000 контактов в месяц
                 </span>
               </h1>
             </motion.div>
