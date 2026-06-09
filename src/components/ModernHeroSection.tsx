@@ -69,22 +69,22 @@ const ModernHeroSection = ({
           <div className="space-y-6">
             <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6 }}>
               <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-foreground leading-tight">
-                Радио активный маркетинг
+                ИИ для радио.
                 <span className="block text-transparent bg-clip-text bg-gradient-to-r from-primary to-love-radio">
-                  Более 300 000 контактов в месяц
+                  Более 300 000 контактов в месяц.
                 </span>
               </h1>
             </motion.div>
 
             <motion.div className="space-y-3 max-w-lg" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }}>
               <p className="text-base md:text-lg text-muted-foreground">
-                Инструмент для планирования эффективного охвата в Ялуторовске и Заводоуковске
+                Мы создали ИИ-инструмент, который спланирует идеальный радиоохват в Ялуторовске и Заводоуковске. Точечно. Прозрачно. Эффективно.
               </p>
               <p className="text-sm text-muted-foreground">
                 <span className="text-primary font-medium">РТО — это 6 федеральных станций в одном окне.</span> Мы объединяем города в единую рекламную сеть и даём бизнесу прозрачные инструменты планирования.
               </p>
               <p className="text-sm text-muted-foreground italic">
-                Мы превращаем радиоэфир в измеримый маркетинговый канал.
+                Мы превратили радиоэфир в измеримый маркетинговый канал.
               </p>
             </motion.div>
 
