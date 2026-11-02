@@ -14,13 +14,71 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      offers: {
+        Row: {
+          company: string | null
+          created_at: string
+          days: number
+          duration: number
+          id: string
+          price_final: number
+          price_list: number
+          slug: string
+          spots_per_day: number
+          stations: string[]
+        }
+        Insert: {
+          company?: string | null
+          created_at?: string
+          days: number
+          duration?: number
+          id?: string
+          price_final: number
+          price_list: number
+          slug: string
+          spots_per_day: number
+          stations: string[]
+        }
+        Update: {
+          company?: string | null
+          created_at?: string
+          days?: number
+          duration?: number
+          id?: string
+          price_final?: number
+          price_list?: number
+          slug?: string
+          spots_per_day?: number
+          stations?: string[]
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_offer: {
+        Args: { _slug: string }
+        Returns: {
+          company: string | null
+          created_at: string
+          days: number
+          duration: number
+          id: string
+          price_final: number
+          price_list: number
+          slug: string
+          spots_per_day: number
+          stations: string[]
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "offers"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
     }
     Enums: {
       [_ in never]: never
