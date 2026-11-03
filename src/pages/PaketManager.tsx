@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
 import OfferCard from "@/components/offer/OfferCard";
-import { OFFER_STATIONS, SPOT_OPTIONS, DAY_OPTIONS, listPrice, makeSlug, formatRub } from "@/lib/offer";
+import { OFFER_STATIONS, SPOT_OPTIONS, DAY_OPTIONS, listPrice, makeSlug, formatRub, MANAGERS } from "@/lib/offer";
 import { downloadElementPdf, shareLink } from "@/lib/offer-pdf";
 
 const PaketManager = () => {
@@ -17,6 +17,7 @@ const PaketManager = () => {
   const [customDays, setCustomDays] = useState("");
   const [price, setPrice] = useState("");
   const [busy, setBusy] = useState(false);
+  const [manager, setManager] = useState(MANAGERS[0].id);
   const cardRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -31,8 +32,8 @@ const PaketManager = () => {
   const final = price ? Number(price.replace(/\s/g, "")) || 0 : list;
   const offer = useMemo(() => ({
     company: company.trim() || null, stations, spots_per_day: spots, days, duration: 20,
-    price_list: list, price_final: final,
-  }), [company, stations, spots, days, list, final]);
+    price_list: list, price_final: final, manager,
+  }), [company, stations, spots, days, list, final, manager]);
 
   const toggle = (id: string) => setStations((s) => s.includes(id) ? s.filter((x) => x !== id) : [...s, id]);
   const valid = stations.length > 0 && days > 0;
@@ -77,12 +78,19 @@ const PaketManager = () => {
                 const on = stations.includes(s.id);
                 return (
                   <button key={s.id} onClick={() => toggle(s.id)} className={cn("flex items-center gap-2 p-2 rounded-xl border text-left text-sm", on ? "border-primary bg-primary/10" : "border-border")}>
-                    <img src={s.logo} alt="" className="w-8 h-8 rounded-lg object-cover" />
+                    <img src={s.logo} alt="" className="w-8 h-8 rounded-lg object-contain bg-background" />
                     <span className="flex-1">{s.name}</span>
                     {on && <Check className="w-4 h-4 text-primary" />}
                   </button>
                 );
               })}
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <p className="text-sm font-medium">Выбор менеджера</p>
+            <div className="flex flex-wrap gap-2">
+              {MANAGERS.map((m) => <button key={m.id} className={chip(manager === m.id)} onClick={() => setManager(m.id)}>{m.name}</button>)}
             </div>
           </div>
 
