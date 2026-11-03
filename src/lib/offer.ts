@@ -58,3 +58,10 @@ export function makeSlug() {
 }
 
 export const formatRub = (n: number) => Math.round(n).toLocaleString("ru-RU") + " ₽";
+
+export interface OfferManager { id: string; name: string; phone: string; email?: string }
+export const MANAGERS: OfferManager[] = [
+  { id: "galina", name: "Галина Александровна", phone: "8 (34535) 5-01-51", email: "yaradio@bk.ru" },
+  { id: "nadezhda", name: "Надежда", phone: "+7 961-209-5444" },
+];
+export const getManager = (id?: string | null) => MANAGERS.find((m) => m.id === id) ?? MANAGERS[0];

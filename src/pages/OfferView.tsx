@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Download, Share2, Sparkles, Calculator, Globe, Loader2 } from "lucide-react";
+import { Download, Share2, Globe, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
@@ -46,11 +46,7 @@ const OfferView = () => {
         </div>
         <div className="rounded-3xl border border-border/50 bg-card p-5 space-y-3">
           <p className="font-semibold">Хотите рассчитать свой вариант?</p>
-          <div className="grid sm:grid-cols-3 gap-2">
-            <Button variant="secondary" asChild><a href={SITE}><Sparkles className="w-4 h-4 mr-2" />ИИ-помощник</a></Button>
-            <Button variant="secondary" asChild><a href={SITE}><Calculator className="w-4 h-4 mr-2" />Расчёт вручную</a></Button>
-            <Button variant="secondary" asChild><a href={SITE}><Globe className="w-4 h-4 mr-2" />Наш сайт</a></Button>
-          </div>
+          <Button variant="secondary" asChild><a href={SITE}><Globe className="w-4 h-4 mr-2" />Рассчитать на сайте</a></Button>
         </div>
       </div>
     </div>

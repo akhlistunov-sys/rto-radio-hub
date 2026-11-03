@@ -21,6 +21,7 @@ export type Database = {
           days: number
           duration: number
           id: string
+          manager: string | null
           price_final: number
           price_list: number
           slug: string
@@ -33,6 +34,7 @@ export type Database = {
           days: number
           duration?: number
           id?: string
+          manager?: string | null
           price_final: number
           price_list: number
           slug: string
@@ -45,6 +47,7 @@ export type Database = {
           days?: number
           duration?: number
           id?: string
+          manager?: string | null
           price_final?: number
           price_list?: number
           slug?: string
@@ -66,6 +69,7 @@ export type Database = {
           days: number
           duration: number
           id: string
+          manager: string | null
           price_final: number
           price_list: number
           slug: string
