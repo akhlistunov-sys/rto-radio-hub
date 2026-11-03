@@ -8,6 +8,13 @@
       "when": 1793611769391,
       "tag": "0000_create_offers",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1793725017240,
+      "tag": "0001_offers_manager",
+      "breakpoints": true
     }
   ]
 }
